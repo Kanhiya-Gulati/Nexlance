@@ -213,9 +213,8 @@ const verifyOtp = async (req, res, next) => {
       });
     }
 
-    // Verify OTP and check expiration (Allows 123456 as master OTP for testing/verification)
-    const isMasterOtp = otp.toString() === '123456';
-    if (!isMasterOtp && (!user.otp || user.otp !== otp.toString() || user.otpExpire < Date.now())) {
+    // Verify OTP and check expiration
+    if (!user.otp || user.otp !== otp.toString() || user.otpExpire < Date.now()) {
       return res.status(400).json({
         success: false,
         message: 'Invalid or expired OTP',
@@ -417,9 +416,8 @@ const loginOtp = async (req, res, next) => {
       });
     }
 
-    // Verify OTP and check expiration (Allows 123456 as master OTP for testing/verification)
-    const isMasterOtp = otp.toString() === '123456';
-    if (!isMasterOtp && (!user.otp || user.otp !== otp.toString() || user.otpExpire < Date.now())) {
+    // Verify OTP and check expiration
+    if (!user.otp || user.otp !== otp.toString() || user.otpExpire < Date.now()) {
       return res.status(400).json({
         success: false,
         message: 'Invalid or expired OTP',
@@ -657,9 +655,8 @@ const resetPassword = async (req, res, next) => {
       });
     }
 
-    // Verify OTP and check expiration (Allows 123456 as master OTP for testing/verification)
-    const isMasterOtp = otp.toString() === '123456';
-    if (!isMasterOtp && (!user.otp || user.otp !== otp.toString() || user.otpExpire < Date.now())) {
+    // Verify OTP and check expiration
+    if (!user.otp || user.otp !== otp.toString() || user.otpExpire < Date.now()) {
       return res.status(400).json({
         success: false,
         message: 'Invalid or expired OTP',
