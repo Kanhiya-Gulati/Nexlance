@@ -7,7 +7,7 @@ const https = require('https');
  */
 const sendEmail = async (options) => {
   const apiKey = process.env.BREVO_API_KEY;
-  const senderEmail = process.env.BREVO_SENDER || 'kanhiyagulati11@gmail.com';
+  const senderEmail = process.env.BREVO_SENDER || 'contact.nexlance1@gmail.com';
 
   if (!apiKey) {
     console.error('ERROR: BREVO_API_KEY is not defined in environment variables.');
