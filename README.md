@@ -2,6 +2,8 @@
 
 Nexlance is a professional, high-end freelance marketplace designed with the premium aesthetics of Fiverr and Upwork. It connects clients and freelancers, enabling real-time collaboration, job postings, interactive profiles, and file-sharing chat threads.
 
+**🔗 Live Website:** [https://nexlance1.netlify.app](https://nexlance1.netlify.app/)
+
 ---
 
 ## 🚀 Key Features
@@ -135,6 +137,7 @@ Developed and maintained by **Kanhiya Gulati**.
 
 * **GitHub Profile:** [@Kanhiya-Gulati](https://github.com/Kanhiya-Gulati)
 * **Email:** [kanhiyagulati11@gmail.com](mailto:kanhiyagulati11@gmail.com)
+* **Live App:** [nexlance1.netlify.app](https://nexlance1.netlify.app/)
 
 ---
 
