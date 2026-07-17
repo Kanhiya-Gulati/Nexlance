@@ -72,12 +72,20 @@
 .bj-search-input {
   flex: 1;
   min-width: 0;
-  border: none;
-  outline: none;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
   background: transparent;
   font-size: 1rem;
   color: var(--text-primary);
   font-weight: 400;
+}
+
+.bj-search-input:focus,
+.bj-search-input:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
 }
 
 .bj-search-input::placeholder {
