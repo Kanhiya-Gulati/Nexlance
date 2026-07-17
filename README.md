@@ -134,7 +134,7 @@ Open [http://localhost:5173](http://localhost:5173) in your browser.
 Developed and maintained by **Kanhiya Gulati**.
 
 * **GitHub Profile:** [@Kanhiya-Gulati](https://github.com/Kanhiya-Gulati)
-* **Email:** [kanhiya7483@gmail.com](mailto:kanhiya7483@gmail.com)
+* **Email:** [kanhiyagulati11@gmail.com](mailto:kanhiyagulati11@gmail.com)
 
 ---
 
