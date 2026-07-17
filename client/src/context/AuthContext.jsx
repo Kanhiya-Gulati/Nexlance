@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../services/api';
 
 /**
  * AuthContext
@@ -13,7 +13,7 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [loading, setLoading] = useState(true);
 
-  // On mount, validate the stored token by calling /api/auth/me
+  // On mount, validate the stored token by calling /auth/me
   useEffect(() => {
     const validateToken = async () => {
       const storedToken = localStorage.getItem('token');
@@ -24,9 +24,7 @@ export const AuthProvider = ({ children }) => {
       }
 
       try {
-        const res = await axios.get('/api/auth/me', {
-          headers: { Authorization: `Bearer ${storedToken}` },
-        });
+        const res = await api.get('/auth/me');
         setUser(res.data.user || res.data);
         setToken(storedToken);
       } catch (err) {
@@ -47,7 +45,7 @@ export const AuthProvider = ({ children }) => {
    * login - Authenticate a user with email and password.
    */
   const login = async (email, password) => {
-    const res = await axios.post('/api/auth/login', { email, password });
+    const res = await api.post('/auth/login', { email, password });
     const data = res.data;
     localStorage.setItem('token', data.token);
     setToken(data.token);
@@ -59,7 +57,7 @@ export const AuthProvider = ({ children }) => {
    * register - Create a new user account (sends verification OTP).
    */
   const register = async (payload) => {
-    const res = await axios.post('/api/auth/register', payload);
+    const res = await api.post('/auth/register', payload);
     return res.data;
   };
 
@@ -67,7 +65,7 @@ export const AuthProvider = ({ children }) => {
    * verifyOtp - Verify registration OTP and log in.
    */
   const verifyOtp = async (email, otp) => {
-    const res = await axios.post('/api/auth/verify-otp', { email, otp });
+    const res = await api.post('/auth/verify-otp', { email, otp });
     const data = res.data;
     localStorage.setItem('token', data.token);
     setToken(data.token);
@@ -79,7 +77,7 @@ export const AuthProvider = ({ children }) => {
    * resendOtp - Resend verification OTP.
    */
   const resendOtp = async (email) => {
-    const res = await axios.post('/api/auth/resend-otp', { email });
+    const res = await api.post('/auth/resend-otp', { email });
     return res.data;
   };
 
@@ -87,7 +85,7 @@ export const AuthProvider = ({ children }) => {
    * sendLoginOtp - Send OTP code for login.
    */
   const sendLoginOtp = async (email) => {
-    const res = await axios.post('/api/auth/send-login-otp', { email });
+    const res = await api.post('/auth/send-login-otp', { email });
     return res.data;
   };
 
@@ -95,7 +93,7 @@ export const AuthProvider = ({ children }) => {
    * loginOtp - Verify login OTP and log in.
    */
   const loginOtp = async (email, otp) => {
-    const res = await axios.post('/api/auth/login-otp', { email, otp });
+    const res = await api.post('/auth/login-otp', { email, otp });
     const data = res.data;
     localStorage.setItem('token', data.token);
     setToken(data.token);
@@ -107,7 +105,7 @@ export const AuthProvider = ({ children }) => {
    * forgotPassword - Send OTP code to reset password.
    */
   const forgotPassword = async (email) => {
-    const res = await axios.post('/api/auth/forgot-password', { email });
+    const res = await api.post('/auth/forgot-password', { email });
     return res.data;
   };
 
@@ -115,7 +113,7 @@ export const AuthProvider = ({ children }) => {
    * resetPassword - Verify OTP and update password.
    */
   const resetPassword = async (email, otp, newPassword) => {
-    const res = await axios.post('/api/auth/reset-password', { email, otp, newPassword });
+    const res = await api.post('/auth/reset-password', { email, otp, newPassword });
     return res.data;
   };
 
@@ -125,7 +123,7 @@ export const AuthProvider = ({ children }) => {
    * Returns data with needsRole flag if first-time Google user.
    */
   const googleLogin = async (credential) => {
-    const res = await axios.post('/api/auth/google', { credential });
+    const res = await api.post('/auth/google', { credential });
     const data = res.data;
 
     // Store the token (even temporarily for role selection)
@@ -147,10 +145,7 @@ export const AuthProvider = ({ children }) => {
    * After role is set, updates user state and completes login.
    */
   const setRole = async (role, password) => {
-    const storedToken = localStorage.getItem('token');
-    const res = await axios.post('/api/auth/set-role', { role, password }, {
-      headers: { Authorization: `Bearer ${storedToken}` },
-    });
+    const res = await api.post('/auth/set-role', { role, password });
     const data = res.data;
 
     if (data.token) {
