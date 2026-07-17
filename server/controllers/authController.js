@@ -74,10 +74,61 @@ const register = async (req, res, next) => {
     // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({
-        success: false,
-        message: 'An account with this email already exists',
-      });
+      if (existingUser.isEmailVerified) {
+        return res.status(400).json({
+          success: false,
+          message: 'An account with this email already exists',
+        });
+      } else {
+        // If the account exists but is NOT verified, update the registration details and send new OTP
+        const otp = generateOtp();
+        const otpExpire = Date.now() + 10 * 60 * 1000; // 10 minutes
+
+        existingUser.name = name;
+        existingUser.password = password; // triggers Mongoose pre-save hash hook
+        existingUser.role = role;
+        existingUser.skills = skills || [];
+        existingUser.otp = otp;
+        existingUser.otpExpire = otpExpire;
+        await existingUser.save();
+
+        // Send verification email in background to prevent blocking HTTP response
+        sendEmail({
+          to: existingUser.email,
+          subject: 'NEXLANCE - Verify Your Email',
+          html: `<div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; background: #f8fafc; padding: 40px 20px;">
+  <div style="background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.07);">
+    <div style="background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); padding: 32px; text-align: center;">
+      <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: 700; letter-spacing: -0.5px;">Nexlance</h1>
+      <p style="color: rgba(255,255,255,0.85); margin: 8px 0 0; font-size: 14px;">Freelance Marketplace</p>
+    </div>
+    <div style="padding: 40px 32px;">
+      <h2 style="color: #1e293b; margin: 0 0 8px; font-size: 22px;">Verify Your Email</h2>
+      <p style="color: #64748b; font-size: 15px; line-height: 1.6; margin: 0 0 24px;">Welcome back to Nexlance! 🎉 Please use the verification code below to complete your registration.</p>
+      <div style="background: linear-gradient(135deg, #f0f0ff 0%, #f5f3ff 100%); border: 2px dashed #4f46e5; border-radius: 12px; padding: 24px; text-align: center; margin: 0 0 24px;">
+        <p style="color: #64748b; font-size: 13px; margin: 0 0 8px; text-transform: uppercase; letter-spacing: 1px;">Your Verification Code</p>
+        <h1 style="color: #4f46e5; font-size: 36px; letter-spacing: 8px; margin: 0; font-weight: 800;">${otp}</h1>
+      </div>
+      <p style="color: #94a3b8; font-size: 13px; text-align: center; margin: 0 0 24px;">⌛ This code expires in <strong>10 minutes</strong></p>
+      <div style="background: #fef3c7; border-radius: 8px; padding: 12px 16px; margin: 0 0 8px;">
+        <p style="color: #92400e; font-size: 13px; margin: 0;">🔒 If you didn’t request this code, please ignore this email. Your account is safe.</p>
+      </div>
+    </div>
+    <div style="background: #f8fafc; padding: 20px 32px; text-align: center; border-top: 1px solid #e2e8f0;">
+      <p style="color: #94a3b8; font-size: 12px; margin: 0;">© 2024 Nexlance. All rights reserved.</p>
+    </div>
+  </div>
+</div>`,
+        }).catch((emailError) => {
+          console.error('Failed to send verification email in background:', emailError.message);
+        });
+
+        return res.status(201).json({
+          success: true,
+          message: 'OTP sent to email. Please verify to complete your signup.',
+          email: existingUser.email,
+        });
+      }
     }
 
     // Generate OTP
@@ -96,12 +147,11 @@ const register = async (req, res, next) => {
       otpExpire,
     });
 
-    // Send verification email
-    try {
-      await sendEmail({
-        to: user.email,
-        subject: 'NEXLANCE - Verify Your Email',
-        html: `<div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; background: #f8fafc; padding: 40px 20px;">
+    // Send verification email in background to prevent blocking HTTP response
+    sendEmail({
+      to: user.email,
+      subject: 'NEXLANCE - Verify Your Email',
+      html: `<div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; background: #f8fafc; padding: 40px 20px;">
   <div style="background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.07);">
     <div style="background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); padding: 32px; text-align: center;">
       <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: 700; letter-spacing: -0.5px;">Nexlance</h1>
@@ -109,26 +159,24 @@ const register = async (req, res, next) => {
     </div>
     <div style="padding: 40px 32px;">
       <h2 style="color: #1e293b; margin: 0 0 8px; font-size: 22px;">Verify Your Email</h2>
-      <p style="color: #64748b; font-size: 15px; line-height: 1.6; margin: 0 0 24px;">Welcome to Nexlance! \uD83C\uDF89 We\u2019re excited to have you on board. Please use the verification code below to complete your registration.</p>
+      <p style="color: #64748b; font-size: 15px; line-height: 1.6; margin: 0 0 24px;">Welcome to Nexlance! 🎉 We’re excited to have you on board. Please use the verification code below to complete your registration.</p>
       <div style="background: linear-gradient(135deg, #f0f0ff 0%, #f5f3ff 100%); border: 2px dashed #4f46e5; border-radius: 12px; padding: 24px; text-align: center; margin: 0 0 24px;">
         <p style="color: #64748b; font-size: 13px; margin: 0 0 8px; text-transform: uppercase; letter-spacing: 1px;">Your Verification Code</p>
         <h1 style="color: #4f46e5; font-size: 36px; letter-spacing: 8px; margin: 0; font-weight: 800;">${otp}</h1>
       </div>
-      <p style="color: #94a3b8; font-size: 13px; text-align: center; margin: 0 0 24px;">\u23F1 This code expires in <strong>10 minutes</strong></p>
+      <p style="color: #94a3b8; font-size: 13px; text-align: center; margin: 0 0 24px;">⌛ This code expires in <strong>10 minutes</strong></p>
       <div style="background: #fef3c7; border-radius: 8px; padding: 12px 16px; margin: 0 0 8px;">
-        <p style="color: #92400e; font-size: 13px; margin: 0;">\uD83D\uDD12 If you didn\u2019t request this code, please ignore this email. Your account is safe.</p>
+        <p style="color: #92400e; font-size: 13px; margin: 0;">🔒 If you didn’t request this code, please ignore this email. Your account is safe.</p>
       </div>
     </div>
     <div style="background: #f8fafc; padding: 20px 32px; text-align: center; border-top: 1px solid #e2e8f0;">
-      <p style="color: #94a3b8; font-size: 12px; margin: 0;">\u00A9 2024 Nexlance. All rights reserved.</p>
+      <p style="color: #94a3b8; font-size: 12px; margin: 0;">© 2024 Nexlance. All rights reserved.</p>
     </div>
   </div>
 </div>`,
-      });
-    } catch (emailError) {
-      console.error('Failed to send verification email:', emailError.message);
-      // We still registered the user, they can request to resend OTP
-    }
+    }).catch((emailError) => {
+      console.error('Failed to send verification email in background:', emailError.message);
+    });
 
     res.status(201).json({
       success: true,
@@ -230,8 +278,8 @@ const resendOtp = async (req, res, next) => {
     user.otpExpire = otpExpire;
     await user.save();
 
-    // Send email
-    await sendEmail({
+    // Send email in background to prevent blocking HTTP response
+    sendEmail({
       to: user.email,
       subject: 'NEXLANCE - Verification OTP',
       html: `<div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; background: #f8fafc; padding: 40px 20px;">
@@ -247,16 +295,18 @@ const resendOtp = async (req, res, next) => {
         <p style="color: #64748b; font-size: 13px; margin: 0 0 8px; text-transform: uppercase; letter-spacing: 1px;">Your Verification Code</p>
         <h1 style="color: #4f46e5; font-size: 36px; letter-spacing: 8px; margin: 0; font-weight: 800;">${otp}</h1>
       </div>
-      <p style="color: #94a3b8; font-size: 13px; text-align: center; margin: 0 0 24px;">\u23F1 This code expires in <strong>10 minutes</strong></p>
+      <p style="color: #94a3b8; font-size: 13px; text-align: center; margin: 0 0 24px;">⌛ This code expires in <strong>10 minutes</strong></p>
       <div style="background: #fef3c7; border-radius: 8px; padding: 12px 16px; margin: 0 0 8px;">
-        <p style="color: #92400e; font-size: 13px; margin: 0;">\uD83D\uDD12 If you didn\u2019t request this code, please ignore this email. Your account is safe.</p>
+        <p style="color: #92400e; font-size: 13px; margin: 0;">🔒 If you didn’t request this code, please ignore this email. Your account is safe.</p>
       </div>
     </div>
     <div style="background: #f8fafc; padding: 20px 32px; text-align: center; border-top: 1px solid #e2e8f0;">
-      <p style="color: #94a3b8; font-size: 12px; margin: 0;">\u00A9 2024 Nexlance. All rights reserved.</p>
+      <p style="color: #94a3b8; font-size: 12px; margin: 0;">© 2024 Nexlance. All rights reserved.</p>
     </div>
   </div>
 </div>`,
+    }).catch((emailError) => {
+      console.error('Failed to resend verification email in background:', emailError.message);
     });
 
     res.status(200).json({
@@ -301,8 +351,8 @@ const sendLoginOtp = async (req, res, next) => {
     user.otpExpire = otpExpire;
     await user.save();
 
-    // Send email
-    await sendEmail({
+    // Send email in background to prevent blocking HTTP response
+    sendEmail({
       to: user.email,
       subject: 'NEXLANCE - Login OTP',
       html: `<div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; background: #f8fafc; padding: 40px 20px;">
@@ -318,16 +368,18 @@ const sendLoginOtp = async (req, res, next) => {
         <p style="color: #64748b; font-size: 13px; margin: 0 0 8px; text-transform: uppercase; letter-spacing: 1px;">Your Verification Code</p>
         <h1 style="color: #4f46e5; font-size: 36px; letter-spacing: 8px; margin: 0; font-weight: 800;">${otp}</h1>
       </div>
-      <p style="color: #94a3b8; font-size: 13px; text-align: center; margin: 0 0 24px;">\u23F1 This code expires in <strong>10 minutes</strong></p>
+      <p style="color: #94a3b8; font-size: 13px; text-align: center; margin: 0 0 24px;">⌛ This code expires in <strong>10 minutes</strong></p>
       <div style="background: #fef3c7; border-radius: 8px; padding: 12px 16px; margin: 0 0 8px;">
-        <p style="color: #92400e; font-size: 13px; margin: 0;">\uD83D\uDD12 If you didn\u2019t request this code, please ignore this email. Your account is safe.</p>
+        <p style="color: #92400e; font-size: 13px; margin: 0;">🔒 If you didn’t request this code, please ignore this email. Your account is safe.</p>
       </div>
     </div>
     <div style="background: #f8fafc; padding: 20px 32px; text-align: center; border-top: 1px solid #e2e8f0;">
-      <p style="color: #94a3b8; font-size: 12px; margin: 0;">\u00A9 2024 Nexlance. All rights reserved.</p>
+      <p style="color: #94a3b8; font-size: 12px; margin: 0;">© 2024 Nexlance. All rights reserved.</p>
     </div>
   </div>
 </div>`,
+    }).catch((emailError) => {
+      console.error('Failed to send login OTP email in background:', emailError.message);
     });
 
     res.status(200).json({
@@ -441,11 +493,11 @@ const login = async (req, res, next) => {
       user.otpExpire = Date.now() + 10 * 60 * 1000;
       await user.save();
 
-      try {
-        await sendEmail({
-          to: user.email,
-          subject: 'NEXLANCE - Verify Your Email',
-          html: `<div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; background: #f8fafc; padding: 40px 20px;">
+      // Send email in background to prevent blocking HTTP response
+      sendEmail({
+        to: user.email,
+        subject: 'NEXLANCE - Verify Your Email',
+        html: `<div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; background: #f8fafc; padding: 40px 20px;">
   <div style="background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.07);">
     <div style="background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); padding: 32px; text-align: center;">
       <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: 700; letter-spacing: -0.5px;">Nexlance</h1>
@@ -458,20 +510,19 @@ const login = async (req, res, next) => {
         <p style="color: #64748b; font-size: 13px; margin: 0 0 8px; text-transform: uppercase; letter-spacing: 1px;">Your Verification Code</p>
         <h1 style="color: #4f46e5; font-size: 36px; letter-spacing: 8px; margin: 0; font-weight: 800;">${otp}</h1>
       </div>
-      <p style="color: #94a3b8; font-size: 13px; text-align: center; margin: 0 0 24px;">\u23F1 This code expires in <strong>10 minutes</strong></p>
+      <p style="color: #94a3b8; font-size: 13px; text-align: center; margin: 0 0 24px;">⌛ This code expires in <strong>10 minutes</strong></p>
       <div style="background: #fef3c7; border-radius: 8px; padding: 12px 16px; margin: 0 0 8px;">
-        <p style="color: #92400e; font-size: 13px; margin: 0;">\uD83D\uDD12 If you didn\u2019t request this code, please ignore this email. Your account is safe.</p>
+        <p style="color: #92400e; font-size: 13px; margin: 0;">🔒 If you didn’t request this code, please ignore this email. Your account is safe.</p>
       </div>
     </div>
     <div style="background: #f8fafc; padding: 20px 32px; text-align: center; border-top: 1px solid #e2e8f0;">
-      <p style="color: #94a3b8; font-size: 12px; margin: 0;">\u00A9 2024 Nexlance. All rights reserved.</p>
+      <p style="color: #94a3b8; font-size: 12px; margin: 0;">© 2024 Nexlance. All rights reserved.</p>
     </div>
   </div>
 </div>`,
-        });
-      } catch (err) {
-        console.error(err);
-      }
+      }).catch((err) => {
+        console.error('Failed to send verification email from login in background:', err.message);
+      });
 
       return res.status(403).json({
         success: false,
@@ -531,8 +582,8 @@ const forgotPassword = async (req, res, next) => {
     user.otpExpire = otpExpire;
     await user.save();
 
-    // Send email
-    await sendEmail({
+    // Send email in background to prevent blocking HTTP response
+    sendEmail({
       to: user.email,
       subject: 'NEXLANCE - Reset Password OTP',
       html: `<div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; background: #f8fafc; padding: 40px 20px;">
@@ -548,16 +599,18 @@ const forgotPassword = async (req, res, next) => {
         <p style="color: #64748b; font-size: 13px; margin: 0 0 8px; text-transform: uppercase; letter-spacing: 1px;">Your Verification Code</p>
         <h1 style="color: #4f46e5; font-size: 36px; letter-spacing: 8px; margin: 0; font-weight: 800;">${otp}</h1>
       </div>
-      <p style="color: #94a3b8; font-size: 13px; text-align: center; margin: 0 0 24px;">\u23F1 This code expires in <strong>10 minutes</strong></p>
+      <p style="color: #94a3b8; font-size: 13px; text-align: center; margin: 0 0 24px;">⌛ This code expires in <strong>10 minutes</strong></p>
       <div style="background: #fef3c7; border-radius: 8px; padding: 12px 16px; margin: 0 0 8px;">
-        <p style="color: #92400e; font-size: 13px; margin: 0;">\uD83D\uDD12 If you didn\u2019t request this code, please ignore this email. Your account is safe.</p>
+        <p style="color: #92400e; font-size: 13px; margin: 0;">🔒 If you didn’t request this code, please ignore this email. Your account is safe.</p>
       </div>
     </div>
     <div style="background: #f8fafc; padding: 20px 32px; text-align: center; border-top: 1px solid #e2e8f0;">
-      <p style="color: #94a3b8; font-size: 12px; margin: 0;">\u00A9 2024 Nexlance. All rights reserved.</p>
+      <p style="color: #94a3b8; font-size: 12px; margin: 0;">© 2024 Nexlance. All rights reserved.</p>
     </div>
   </div>
 </div>`,
+    }).catch((emailError) => {
+      console.error('Failed to send reset password email in background:', emailError.message);
     });
 
     res.status(200).json({

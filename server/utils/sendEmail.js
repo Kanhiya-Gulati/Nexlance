@@ -5,13 +5,18 @@ const nodemailer = require('nodemailer');
  * @param {Object} options - Email options (to, subject, text, html)
  */
 const sendEmail = async (options) => {
-  // Create transporter
+  // Create transporter with explicit Gmail SMTP and timeouts to prevent hanging
   const transporter = nodemailer.createTransport({
-    service: process.env.EMAIL_SERVICE || 'gmail',
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
     auth: {
-      user: process.env.EMAIL_USER || 'nexlance.marketplace@gmail.com', // placeholder / fallback
-      pass: process.env.EMAIL_PASS || 'jpxd kfui nrvd jvzn', // App Password (if provided, otherwise env)
+      user: process.env.EMAIL_USER || 'nexlance.marketplace@gmail.com',
+      pass: process.env.EMAIL_PASS || 'jpxd kfui nrvd jvzn',
     },
+    connectionTimeout: 5000, // 5 seconds connection timeout
+    greetingTimeout: 5000,
+    socketTimeout: 5000,
   });
 
   // Define email options
