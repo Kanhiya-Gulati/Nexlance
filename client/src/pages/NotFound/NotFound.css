@@ -1,0 +1,203 @@
+/* ============================================================
+   404 NOT FOUND PAGE — Premium Modern Fiverr/Upwork Style
+   ============================================================ */
+
+.notfound-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - var(--navbar-height));
+  padding: 40px 24px;
+  background: var(--bg-page);
+  position: relative;
+  overflow: hidden;
+}
+
+.notfound-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  text-align: center;
+  max-width: 520px;
+  position: relative;
+  z-index: 2;
+  animation: fadeInUp 0.5s ease both;
+}
+
+.notfound-graphic {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: -10px;
+}
+
+.notfound-code {
+  font-size: 9.5rem;
+  font-weight: 900;
+  color: var(--primary);
+  letter-spacing: -4px;
+  line-height: 1;
+  user-select: none;
+  animation: float404 6s ease-in-out infinite;
+  text-shadow: 0 15px 30px rgba(29, 191, 115, 0.15);
+}
+
+.notfound-shapes {
+  position: absolute;
+  inset: -40px;
+  pointer-events: none;
+}
+
+.nf-shape {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.1;
+  background: var(--primary);
+  filter: blur(2px);
+}
+
+.nf-shape-1 {
+  width: 90px;
+  height: 90px;
+  top: -10px;
+  right: -20px;
+  animation: float404 8s ease-in-out infinite alternate;
+}
+
+.nf-shape-2 {
+  width: 60px;
+  height: 60px;
+  bottom: 0px;
+  left: -30px;
+  animation: float404 6s ease-in-out infinite alternate-reverse;
+  background: #0d9488;
+}
+
+.nf-shape-3 {
+  width: 40px;
+  height: 40px;
+  top: 30px;
+  left: -10px;
+  animation: float404 5s ease-in-out infinite alternate;
+  background: #ff914d;
+}
+
+@keyframes float404 {
+  0%   { transform: translateY(0) rotate(0deg); }
+  50%  { transform: translateY(-12px) rotate(3deg); }
+  100% { transform: translateY(0) rotate(0deg); }
+}
+
+.notfound-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.notfound-title {
+  font-size: 1.85rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.3px;
+  margin: 0;
+}
+
+.notfound-message {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  max-width: 380px;
+  margin: 0;
+}
+
+.notfound-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.notfound-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 30px;
+  background: var(--primary);
+  color: #fff;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: var(--transition-fast);
+  box-shadow: var(--shadow-green);
+  white-space: nowrap;
+}
+
+.notfound-btn-primary:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(29, 191, 115, 0.35);
+}
+
+.notfound-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 28px;
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: var(--transition-fast);
+  white-space: nowrap;
+}
+
+.notfound-btn-secondary:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--primary-light);
+}
+
+/* Background animated glow */
+.notfound-bg-glow {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(29, 191, 115, 0.06) 0%, transparent 70%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .notfound-code {
+    font-size: 7rem;
+  }
+  
+  .notfound-title {
+    font-size: 1.5rem;
+  }
+  
+  .notfound-actions {
+    flex-direction: column;
+    padding: 0 16px;
+  }
+  
+  .notfound-btn-primary,
+  .notfound-btn-secondary {
+    width: 100%;
+  }
+}

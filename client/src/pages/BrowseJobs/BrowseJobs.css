@@ -1,0 +1,801 @@
+/* ============================================================
+   BROWSE JOBS PAGE — Premium Fiverr/Upwork-style UI
+   NEXLANCE Freelance Marketplace
+   ============================================================ */
+
+/* ── Keyframes ─────────────────────────────────────────────── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+@keyframes cardEntrance {
+  from { opacity: 0; transform: translateY(16px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0)    scale(1);    }
+}
+
+@keyframes filterSlide {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0);     }
+}
+
+/* ════════════════════════════════════════════════════════════
+   LAYOUT
+   ════════════════════════════════════════════════════════════ */
+.bj-layout {
+  padding-top: 32px;
+  padding-bottom: 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  animation: fadeInUp 0.4s ease both;
+}
+
+/* ════════════════════════════════════════════════════════════
+   SEARCH BAR
+   ════════════════════════════════════════════════════════════ */
+.bj-search-bar {
+  background: var(--bg-card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: 14px 16px 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.bj-search-bar:focus-within {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(29, 191, 115, 0.1), var(--shadow-card);
+}
+
+.bj-search-form {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+.bj-search-icon {
+  color: var(--text-muted);
+  flex-shrink: 0;
+  transition: color 0.2s ease;
+}
+
+.bj-search-bar:focus-within .bj-search-icon {
+  color: var(--primary);
+}
+
+.bj-search-input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 1rem;
+  color: var(--text-primary);
+  font-weight: 400;
+}
+
+.bj-search-input::placeholder {
+  color: var(--text-muted);
+}
+
+.bj-search-btn {
+  flex-shrink: 0;
+  background: var(--primary);
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 11px 24px;
+  border-radius: var(--radius-full);
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+.bj-search-btn:hover {
+  background: var(--primary-dark);
+  box-shadow: var(--shadow-green);
+  transform: translateY(-1px);
+}
+
+.bj-search-btn:active {
+  transform: translateY(0);
+}
+
+/* Filter toggle button */
+.bj-filter-toggle {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 11px 18px;
+  border-radius: var(--radius-full);
+  border: 1.5px solid var(--border);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  position: relative;
+}
+
+.bj-filter-toggle:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--primary-light);
+}
+
+.bj-filter-toggle.active {
+  background: var(--primary-light);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+/* Active filter dot indicator */
+.bj-filter-dot {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 7px;
+  height: 7px;
+  background: var(--primary);
+  border-radius: 9999px;
+  border: 1.5px solid #fff;
+}
+
+/* ════════════════════════════════════════════════════════════
+   FILTER PANEL
+   ════════════════════════════════════════════════════════════ */
+.bj-filter-panel {
+  background: var(--bg-card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: 28px 28px 24px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 2fr;
+  gap: 24px;
+  align-items: start;
+  animation: filterSlide 0.25s ease both;
+}
+
+.bj-filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Filter label */
+.bj-filter-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Select */
+.bj-filter-select {
+  appearance: none;
+  -webkit-appearance: none;
+  background: var(--bg-card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 10px 36px 10px 12px;
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  cursor: pointer;
+  width: 100%;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2395979d' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+}
+
+.bj-filter-select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(29, 191, 115, 0.1);
+}
+
+/* Budget inputs */
+.bj-budget-inputs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bj-budget-input {
+  flex: 1;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 10px 12px;
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  background: var(--bg-card);
+  width: 100%;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  outline: none;
+}
+
+.bj-budget-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(29, 191, 115, 0.1);
+}
+
+.bj-budget-input::placeholder {
+  color: var(--text-muted);
+}
+
+.bj-budget-sep {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+/* Skills filter (full-width) */
+.bj-filter-skills {
+  grid-column: 1 / -1;
+  padding-top: 4px;
+  border-top: 1px solid var(--border);
+  margin-top: 4px;
+}
+
+.bj-skills-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.bj-skill-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 13px;
+  border-radius: var(--radius-full);
+  border: 1.5px solid var(--border);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  white-space: nowrap;
+}
+
+.bj-skill-tag:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--primary-light);
+}
+
+.bj-skill-tag.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* Reset button */
+.bj-reset-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: transparent;
+  border: 1.5px solid #fca5a5;
+  color: #ef4444;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 9px 18px;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  align-self: flex-end;
+  grid-column: 1 / -1;
+  justify-self: start;
+  margin-top: 4px;
+}
+
+.bj-reset-btn:hover {
+  background: #fef2f2;
+  border-color: #ef4444;
+}
+
+/* ════════════════════════════════════════════════════════════
+   RESULTS COUNT
+   ════════════════════════════════════════════════════════════ */
+.bj-results-count {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  margin-bottom: -8px;
+}
+
+/* ════════════════════════════════════════════════════════════
+   JOBS GRID
+   ════════════════════════════════════════════════════════════ */
+.bj-jobs-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+/* ════════════════════════════════════════════════════════════
+   JOB CARD
+   ════════════════════════════════════════════════════════════ */
+.bj-job-card {
+  background: var(--bg-card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  overflow: hidden;
+  position: relative;
+  animation: cardEntrance 0.4s ease both;
+}
+
+.bj-job-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+  border-color: var(--primary);
+}
+
+/* Subtle top bar accent on hover */
+.bj-job-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--primary);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.bj-job-card:hover::before {
+  transform: scaleX(1);
+}
+
+/* ── Card Header ───────────────────────────────────────────── */
+.bj-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+/* Category badge */
+.bj-category-badge {
+  display: inline-block;
+  background: var(--primary-light);
+  color: var(--primary);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Save button */
+.bj-save-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-full);
+  border: 1.5px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.bj-save-btn:hover {
+  border-color: #fca5a5;
+  color: #ef4444;
+  background: #fef2f2;
+}
+
+.bj-save-btn.saved {
+  border-color: #ef4444;
+  color: #ef4444;
+  background: #fef2f2;
+}
+
+.bj-save-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Card Title ────────────────────────────────────────────── */
+.bj-card-title {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.4;
+  text-decoration: none;
+  margin-bottom: 10px;
+  transition: color 0.2s ease;
+  letter-spacing: -0.01em;
+}
+
+.bj-card-title:hover {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+/* ── Card Description ──────────────────────────────────────── */
+.bj-card-desc {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  line-height: 1.65;
+  margin-bottom: 14px;
+}
+
+/* ── Skills Chips ──────────────────────────────────────────── */
+.bj-card-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.bj-skill-chip {
+  display: inline-block;
+  background: #f5f5f5;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.bj-skill-more {
+  background: var(--primary-light);
+  color: var(--primary);
+  border-color: rgba(29, 191, 115, 0.2);
+  font-weight: 600;
+}
+
+/* ── Card Footer ───────────────────────────────────────────── */
+.bj-card-footer {
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Info row */
+.bj-card-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.bj-info-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.bj-info-item svg {
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+/* Client + date row */
+.bj-card-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.bj-client-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+/* Client avatar circle */
+.bj-client-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.bj-client-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.bj-client-name {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 120px;
+}
+
+.bj-post-date {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Applicants count */
+.bj-card-apps {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.bj-card-apps svg {
+  color: var(--text-muted);
+}
+
+/* ── View Details Button ────────────────────────────────────── */
+.bj-view-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  background: var(--primary);
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+  margin-top: 14px;
+  letter-spacing: 0.01em;
+  border: none;
+  cursor: pointer;
+}
+
+.bj-view-btn:hover {
+  background: var(--primary-dark);
+  box-shadow: var(--shadow-green);
+  transform: translateY(-1px);
+  text-decoration: none;
+  color: #ffffff;
+}
+
+.bj-view-btn:active {
+  transform: translateY(0);
+}
+
+.bj-view-btn svg {
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.bj-view-btn:hover svg {
+  transform: translateX(4px);
+}
+
+/* ════════════════════════════════════════════════════════════
+   PAGINATION
+   ════════════════════════════════════════════════════════════ */
+.bj-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding-top: 16px;
+  flex-wrap: wrap;
+}
+
+.bj-page-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-card);
+  border: 1.5px solid var(--border);
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 10px 18px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 44px;
+  justify-content: center;
+}
+
+.bj-page-btn:hover:not(:disabled) {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--primary-light);
+}
+
+.bj-page-btn.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #ffffff;
+  box-shadow: var(--shadow-green);
+}
+
+.bj-page-btn:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+}
+
+.bj-page-info {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  padding: 0 8px;
+  white-space: nowrap;
+}
+
+/* ════════════════════════════════════════════════════════════
+   RESPONSIVE — 1200px
+   ════════════════════════════════════════════════════════════ */
+@media (max-width: 1200px) {
+  .bj-jobs-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .bj-filter-panel {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .bj-filter-skills {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════
+   RESPONSIVE — 768px (Tablet)
+   ════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .bj-layout {
+    padding-top: 24px;
+    padding-bottom: 60px;
+    gap: 18px;
+  }
+
+  .bj-search-bar {
+    padding: 12px 14px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .bj-search-form {
+    flex: 1 1 100%;
+    order: 1;
+  }
+
+  .bj-filter-toggle {
+    order: 2;
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+
+  .bj-search-btn {
+    flex-shrink: 0;
+    padding: 10px 20px;
+  }
+
+  .bj-filter-panel {
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    padding: 20px;
+  }
+
+  .bj-jobs-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════
+   RESPONSIVE — 480px (Mobile)
+   ════════════════════════════════════════════════════════════ */
+@media (max-width: 480px) {
+  .bj-search-bar {
+    border-radius: var(--radius-md);
+    padding: 12px;
+  }
+
+  .bj-search-btn {
+    padding: 10px 16px;
+    font-size: 0.84rem;
+  }
+
+  .bj-filter-panel {
+    grid-template-columns: 1fr;
+    padding: 16px;
+    gap: 14px;
+  }
+
+  .bj-filter-skills {
+    grid-column: 1;
+  }
+
+  .bj-jobs-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .bj-job-card {
+    padding: 18px;
+  }
+
+  .bj-card-title {
+    font-size: 1rem;
+  }
+
+  .bj-pagination {
+    gap: 6px;
+  }
+
+  .bj-page-btn {
+    padding: 9px 14px;
+    font-size: 0.82rem;
+  }
+
+  .bj-card-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+}

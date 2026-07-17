@@ -1,0 +1,19 @@
+/* ===========================
+   APP-LEVEL STYLES
+   =========================== */
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-main {
+  flex: 1;
+  padding-bottom: 64px; /* Consistent gap between main screen content and footer */
+}
+
+/* Exclude full-screen page layouts (like Chat) from having bottom padding */
+.app-main:has(.chat-page) {
+  padding-bottom: 0;
+}

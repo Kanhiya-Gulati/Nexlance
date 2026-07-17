@@ -1,0 +1,187 @@
+/* ============================================================
+   SELECT ROLE PAGE — Premium Role Selection for Google OAuth
+   ============================================================ */
+
+.select-role-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - var(--navbar-height));
+  padding: 40px 24px;
+  background: var(--bg-page);
+}
+
+.select-role-card {
+  width: 100%;
+  max-width: 520px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 48px 44px;
+  box-shadow: var(--shadow-card);
+  box-sizing: border-box;
+}
+
+.select-role-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.select-role-logo {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--primary);
+  letter-spacing: -0.5px;
+  margin-bottom: 16px;
+  user-select: none;
+}
+
+.select-role-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 8px;
+  letter-spacing: -0.3px;
+}
+
+.select-role-subtitle {
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Role Cards */
+.select-role-options {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.role-option {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  font-family: inherit;
+}
+
+.role-option:hover {
+  border-color: var(--primary-light);
+  background: var(--primary-light);
+  box-shadow: var(--shadow-sm);
+}
+
+.role-option.selected {
+  border-color: var(--primary);
+  background: var(--primary-light);
+  box-shadow: 0 0 0 3px rgba(29, 191, 115, 0.15);
+}
+
+.role-option-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-page);
+  border-radius: var(--radius);
+}
+
+.role-option.selected .role-option-icon {
+  background: var(--primary);
+  filter: none;
+}
+
+.role-option-content {
+  flex: 1;
+}
+
+.role-option-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 4px;
+}
+
+.role-option-desc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.role-option-check {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+}
+
+/* Submit */
+.select-role-submit {
+  width: 100%;
+  height: 50px;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.select-role-submit:hover:not(:disabled) {
+  background: var(--primary-dark);
+  box-shadow: var(--shadow-green);
+  transform: translateY(-1px);
+}
+
+.select-role-submit:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Spinner */
+.select-role-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2.5px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: srSpin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes srSpin {
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 480px) {
+  .select-role-card {
+    padding: 32px 20px;
+    border-radius: var(--radius-md);
+  }
+
+  .role-option {
+    padding: 16px;
+    gap: 12px;
+  }
+}

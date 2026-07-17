@@ -1,0 +1,404 @@
+/* ============================================================
+   SAVED JOBS PAGE — Premium (Fiverr / Upwork Style)
+   ============================================================ */
+
+/* ── CSS Extras ─────────────────────────────────────────── */
+:root {
+  --warning:    #f59e0b;
+  --warning-bg: #fef3c7;
+  --radius-sm:  6px;
+  --shadow-xs:  0 1px 3px rgba(0,0,0,0.06);
+}
+
+/* ── Page Shell ─────────────────────────────────────────── */
+.saved-jobs-page {
+  background: var(--bg-page);
+  min-height: 100vh;
+}
+
+.saved-jobs-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 32px 24px 80px;
+}
+
+/* ── Header ─────────────────────────────────────────────── */
+.saved-jobs-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.saved-jobs-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.3px;
+}
+
+.saved-count {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.saved-jobs-browse-btn,
+.saved-browse-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 20px;
+  background: var(--primary);
+  color: #fff;
+  border-radius: var(--radius-full);
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: var(--transition);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.saved-jobs-browse-btn:hover,
+.saved-browse-btn:hover {
+  background: var(--primary-dark);
+  box-shadow: var(--shadow-green);
+}
+
+/* ── 3-Column Grid (mirrors BrowseJobs) ─────────────────── */
+.saved-jobs-grid,
+.saved-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+/* ── Job Card (sj- prefix, mirrors bj-job-card) ─────────── */
+.sj-job-card,
+.saved-card {
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: var(--radius-lg);
+  padding: 22px;
+  box-shadow: var(--shadow-card);
+  transition: var(--transition);
+  position: relative;
+}
+
+.sj-job-card:hover,
+.saved-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+  border-color: var(--border-hover);
+}
+
+/* ── Card Top Row (category + unsave button) ─────────────── */
+.sj-card-header,
+.saved-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+/* Category Badge */
+.sj-category-badge {
+  padding: 3px 10px;
+  background: var(--primary-light);
+  color: var(--primary);
+  border-radius: var(--radius-sm);
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+/* Status badge */
+.sj-status-badge,
+.saved-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.status--open,
+.sj-status--open      { background: var(--success-bg); color: var(--success); }
+.status--progress,
+.sj-status--progress  { background: var(--warning-bg); color: var(--warning); }
+.status--completed,
+.sj-status--completed { background: var(--primary-light); color: var(--primary); }
+.status--closed,
+.sj-status--closed    { background: var(--bg-page); color: var(--text-muted); }
+
+/* ── Unsave / Remove Button — Red Heart ─────────────────── */
+.sj-unsave-btn,
+.saved-card__unsave {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  border: none;
+  background: var(--error-bg);
+  color: var(--error);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  transition: var(--transition);
+  opacity: 0.75;
+  z-index: 1;
+}
+
+.sj-unsave-btn:hover,
+.saved-card__unsave:hover {
+  background: var(--error);
+  color: #fff;
+  opacity: 1;
+  transform: scale(1.08);
+  box-shadow: 0 4px 12px rgba(229, 57, 53, 0.3);
+}
+
+/* ── Card Title ─────────────────────────────────────────── */
+.sj-card-title,
+.saved-card__title {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-decoration: none;
+  line-height: 1.4;
+  margin-bottom: 6px;
+  display: block;
+  transition: var(--transition);
+  padding-right: 30px; /* avoid overlap with absolute heart btn */
+}
+
+.sj-card-title:hover,
+.saved-card__title:hover {
+  color: var(--primary);
+}
+
+/* ── Description ────────────────────────────────────────── */
+.sj-card-desc,
+.saved-card__desc {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+  margin-bottom: 12px;
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ── Skills ─────────────────────────────────────────────── */
+.sj-card-skills,
+.saved-card__skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 14px;
+}
+
+.sj-skill-chip,
+.skill-tag {
+  padding: 3px 9px;
+  background: var(--bg-page);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  border-radius: var(--radius-sm);
+  font-size: 0.6875rem;
+  font-weight: 500;
+}
+
+.sj-skill-more,
+.skill-tag--more {
+  background: var(--primary-light);
+  border-color: transparent;
+  color: var(--primary);
+  font-weight: 700;
+}
+
+/* ── Card Info Row (budget, timeline) ───────────────────── */
+.sj-card-info,
+.saved-card__meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.sj-info-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.sj-info-item svg {
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+/* ── Card Footer ────────────────────────────────────────── */
+.sj-card-footer,
+.saved-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  gap: 8px;
+}
+
+/* Client info */
+.sj-client-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sj-client-avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, #1dbf73, #0d9a5a);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.sj-client-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.sj-client-avatar span {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.sj-client-name,
+.saved-card__saved-at {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+/* View / Apply Button */
+.sj-view-btn,
+.saved-card__apply-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 6px 14px;
+  background: var(--primary-light);
+  color: var(--primary);
+  border-radius: var(--radius);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+
+.sj-view-btn:hover,
+.saved-card__apply-btn:hover {
+  background: var(--primary);
+  color: #fff;
+}
+
+/* ── Empty State ────────────────────────────────────────── */
+.saved-jobs-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 72px 24px;
+  text-align: center;
+  gap: 12px;
+}
+
+.saved-jobs-empty-icon {
+  font-size: 3.5rem;
+  margin-bottom: 8px;
+}
+
+.saved-jobs-empty h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.saved-jobs-empty p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* ════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ════════════════════════════════════════════════════════════ */
+@media (max-width: 1200px) {
+  .saved-jobs-grid,
+  .saved-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .saved-jobs-inner {
+    padding: 24px 16px 60px;
+  }
+
+  .saved-jobs-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .saved-jobs-grid,
+  .saved-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sj-card-footer,
+  .saved-card__footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .sj-view-btn,
+  .saved-card__apply-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .sj-card-info,
+  .saved-card__meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+}

@@ -1,0 +1,785 @@
+/* ============================================================
+   APPLICATIONS PAGE — Client View (Upwork / Fiverr Style)
+   ============================================================ */
+
+/* ── CSS Extras (warning colours not in root) ────────────── */
+:root {
+  --warning:    #f59e0b;
+  --warning-bg: #fef3c7;
+  --radius-sm:  6px;
+  --shadow-xs:  0 1px 3px rgba(0,0,0,0.06);
+}
+
+/* ── Page Shell ─────────────────────────────────────────── */
+.applications-page {
+  background: var(--bg-page);
+  min-height: 100vh;
+  padding: 0;
+}
+
+.apps-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 24px 80px;
+}
+
+/* ── Header Row ─────────────────────────────────────────── */
+.apps-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.apps-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.3px;
+}
+
+.apps-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  background: var(--bg-card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.apps-back-btn:hover {
+  border-color: var(--border-hover);
+  color: var(--text-primary);
+  background: #f5f5f5;
+}
+
+/* Job subtitle + count badge */
+.apps-job-title {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.apps-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--primary-light);
+  color: var(--primary);
+  border-radius: var(--radius-full);
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 2px 10px;
+  letter-spacing: 0.2px;
+}
+
+/* ── Filter Chips ───────────────────────────────────────── */
+.apps-filters {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.apps-filter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-full);
+  padding: 7px 16px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  font-family: inherit;
+}
+
+.apps-filter-btn:hover {
+  border-color: var(--border-hover);
+  color: var(--text-primary);
+}
+
+.apps-filter-btn.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+
+/* ── Applications Grid ──────────────────────────────────── */
+.apps-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+/* ── Application Card ───────────────────────────────────── */
+.app-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-card);
+  transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+}
+
+.app-card:hover {
+  box-shadow: var(--shadow-hover);
+  border-color: var(--border-hover);
+  transform: translateY(-1px);
+}
+
+/* Card Header */
+.app-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  gap: 12px;
+}
+
+/* Applicant info block */
+.applicant-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.applicant-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, #1dbf73, #0d9a5a);
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.applicant-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--radius-full);
+}
+
+.applicant-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: var(--transition);
+  display: block;
+}
+
+.applicant-name:hover {
+  color: var(--primary);
+}
+
+.applicant-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.applicant-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  background: var(--bg-page);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+/* Status Badge */
+.app-status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.app-status-badge.app-status--pending,
+.app-status-badge[data-status="pending"] {
+  background: var(--warning-bg);
+  color: var(--warning);
+}
+
+.app-status-badge.app-status--accepted,
+.app-status-badge[data-status="accepted"] {
+  background: var(--success-bg);
+  color: var(--success);
+}
+
+.app-status-badge.app-status--rejected,
+.app-status-badge[data-status="rejected"] {
+  background: var(--error-bg);
+  color: var(--error);
+}
+
+.app-status-badge.app-status--withdrawn,
+.app-status-badge[data-status="withdrawn"] {
+  background: var(--bg-page);
+  color: var(--text-muted);
+}
+
+/* ── App Details ────────────────────────────────────────── */
+.app-details {
+  margin-bottom: 16px;
+}
+
+.app-budget-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.app-budget {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.app-timeline {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Cover Letter */
+.app-cover-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.app-cover-text {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  white-space: pre-wrap;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Skills */
+.app-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.app-skill-tag {
+  padding: 3px 10px;
+  background: var(--bg-page);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.app-skill-more {
+  background: var(--primary-light);
+  border-color: transparent;
+  color: var(--primary);
+  font-weight: 700;
+}
+
+/* ── Card Actions ───────────────────────────────────────── */
+.app-actions,
+.app-card-actions {
+  display: flex;
+  gap: 8px;
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+  margin-top: auto;
+  flex-wrap: wrap;
+}
+
+/* Accept */
+.btn-accept,
+.btn-app-accept {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 9px 16px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btn-accept:hover:not(:disabled),
+.btn-app-accept:hover:not(:disabled) {
+  background: var(--primary-dark);
+  box-shadow: var(--shadow-green);
+}
+
+.btn-accept:disabled,
+.btn-app-accept:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Reject */
+.btn-reject,
+.btn-app-reject {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: var(--bg-card);
+  color: var(--error);
+  border: 1.5px solid var(--error);
+  border-radius: var(--radius-sm);
+  padding: 9px 16px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btn-reject:hover:not(:disabled),
+.btn-app-reject:hover:not(:disabled) {
+  background: var(--error);
+  color: #fff;
+}
+
+.btn-reject:disabled,
+.btn-app-reject:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Message */
+.btn-message-app,
+.btn-app-message {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 9px 16px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+  text-decoration: none;
+}
+
+.btn-message-app:hover,
+.btn-app-message:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--primary-light);
+}
+
+/* Spinner inside buttons */
+.btn-spinner-sm {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: spinBtn 0.6s linear infinite;
+}
+
+@keyframes spinBtn {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Legacy / Compat Classes ───────────────────────────── */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-decoration: none;
+  margin-bottom: 24px;
+  transition: var(--transition);
+}
+
+.back-link:hover {
+  color: var(--primary);
+}
+
+.app-job-header {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px 32px;
+  margin-bottom: 28px;
+  box-shadow: var(--shadow-card);
+  position: relative;
+  overflow: hidden;
+}
+
+.app-job-header::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary), #0d9a5a);
+}
+
+.app-job-header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.app-job-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0 0 10px;
+  letter-spacing: -0.02em;
+}
+
+.app-job-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.app-job-category {
+  padding: 4px 12px;
+  background: var(--primary-light);
+  color: var(--primary);
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.app-job-budget {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.app-job-status {
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.status-open   { background: var(--primary-light); color: var(--primary); }
+.status-active { background: var(--success-bg); color: var(--success); }
+.status-closed { background: var(--bg-page); color: var(--text-muted); }
+
+.app-job-count {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 80px;
+  padding: 16px;
+  background: var(--primary-light);
+  border-radius: var(--radius-md);
+  flex-shrink: 0;
+}
+
+.app-count-number {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--primary);
+  line-height: 1;
+}
+
+.app-count-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--primary);
+  opacity: 0.7;
+  margin-top: 4px;
+}
+
+.applications-section { margin-top: 8px; }
+.section-title {
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 20px;
+}
+
+.applications-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Old application-card (list style) */
+.application-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  box-shadow: var(--shadow-card);
+  transition: var(--transition);
+}
+
+.application-card:hover {
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-1px);
+}
+
+.application-card.app-status--pending  { border-left-color: var(--warning); }
+.application-card.app-status--accepted { border-left-color: var(--success); }
+.application-card.app-status--rejected { border-left-color: var(--error); }
+.application-card.app-status--withdrawn { border-left-color: var(--text-muted); }
+
+.app-freelancer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.app-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  border: 2px solid var(--border);
+}
+
+.app-avatar-initials {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1dbf73, #0d9a5a);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.app-freelancer-info { display: flex; flex-direction: column; }
+
+.app-freelancer-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.app-freelancer-name:hover { color: var(--primary); }
+
+.app-applied-date {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.app-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.app-cover-letter { margin-bottom: 16px; }
+
+.app-section-label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin: 0 0 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.app-proposal-details {
+  display: flex;
+  gap: 32px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.app-detail { display: flex; flex-direction: column; gap: 2px; }
+
+.app-detail-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.app-detail-value {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* ── Complete Project Button ───────────────────────────── */
+.btn-complete-project {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-complete-project:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
+
+.btn-complete-project:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ════════════════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+  .apps-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .apps-inner {
+    padding: 24px 16px 60px;
+  }
+
+  .apps-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .app-job-header {
+    padding: 20px;
+  }
+
+  .app-job-header-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .app-job-title { font-size: 1.25rem; }
+
+  .app-job-count {
+    flex-direction: row;
+    gap: 8px;
+    width: 100%;
+    justify-content: flex-start;
+    min-width: auto;
+    padding: 12px 16px;
+  }
+
+  .app-count-number { font-size: 1.5rem; }
+
+  .app-card { padding: 18px; }
+
+  .app-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .app-proposal-details { gap: 16px; }
+
+  .app-actions,
+  .app-card-actions {
+    flex-direction: column;
+  }
+
+  .btn-accept,
+  .btn-reject,
+  .btn-message-app,
+  .btn-app-accept,
+  .btn-app-reject,
+  .btn-app-message {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-job-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .apps-filters {
+    gap: 6px;
+  }
+}

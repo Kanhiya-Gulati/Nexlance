@@ -1,0 +1,335 @@
+/* ============================================================
+   EDIT JOB PAGE — Premium Upwork/Fiverr style Form
+   ============================================================ */
+
+.edit-job-container {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+}
+
+.edit-job-header {
+  margin-bottom: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: var(--transition-fast);
+  align-self: flex-start;
+}
+
+.back-link:hover {
+  color: var(--primary);
+}
+
+.page-title {
+  font-size: 1.85rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.4px;
+  margin: 0;
+}
+
+.page-description {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.edit-job-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Form Card */
+.job-form-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 32px 40px;
+  box-shadow: var(--shadow-card);
+  transition: var(--transition);
+}
+
+.job-form-card:hover {
+  box-shadow: var(--shadow-hover);
+}
+
+/* Form Group */
+.form-group {
+  margin-bottom: 24px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-label {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  display: inline-flex;
+  align-items: center;
+}
+
+.required {
+  color: var(--error);
+  margin-left: 2px;
+}
+
+.label-hint {
+  font-weight: 400;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  margin-left: 6px;
+}
+
+/* Inputs */
+.form-input,
+.form-select,
+.form-textarea {
+  width: 100%;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 11px 14px;
+  font-size: 0.9375rem;
+  color: var(--text-primary);
+  background: #fff;
+  outline: none;
+  transition: var(--transition-fast);
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.form-input:hover,
+.form-select:hover,
+.form-textarea:hover {
+  border-color: var(--border-hover);
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(29, 191, 115, 0.12);
+}
+
+.form-input.input-error,
+.form-textarea.input-error,
+.form-select.input-error,
+.skills-input-container.input-error {
+  border-color: var(--error);
+  background: var(--error-bg);
+}
+
+.form-input.input-error:focus,
+.form-textarea.input-error:focus,
+.form-select.input-error:focus,
+.skills-input-container.input-error:focus-within {
+  box-shadow: 0 0 0 3px rgba(229, 57, 53, 0.12);
+}
+
+/* Select element styling */
+.form-select {
+  appearance: none;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%2362646a' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 10px;
+  padding-right: 40px;
+}
+
+.form-textarea {
+  min-height: 160px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+/* Form Row Grid */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* Skills Input Widget */
+.skills-input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.skills-input-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  background: #fff;
+  min-height: 46px;
+  align-items: center;
+  box-sizing: border-box;
+  transition: var(--transition-fast);
+}
+
+.skills-input-container:focus-within {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(29, 191, 115, 0.12);
+}
+
+.skills-input-container:hover:not(:focus-within) {
+  border-color: var(--border-hover);
+}
+
+.skills-input {
+  border: none;
+  outline: none;
+  padding: 4px 0;
+  font-size: 0.9375rem;
+  color: var(--text-primary);
+  flex: 1;
+  min-width: 120px;
+}
+
+.skills-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.skill-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px 4px 12px;
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.skill-remove {
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-full);
+  background: rgba(29, 191, 115, 0.2);
+  color: var(--primary-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  cursor: pointer;
+  border: none;
+  transition: var(--transition-fast);
+}
+
+.skill-remove:hover {
+  background: var(--primary-dark);
+  color: #fff;
+}
+
+/* Character count */
+.char-count {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  align-self: flex-end;
+  margin-top: 2px;
+}
+
+/* Form Actions */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  border-top: 1px solid var(--border);
+  padding-top: 24px;
+  margin-top: 8px;
+}
+
+.btn-cancel {
+  padding: 12px 28px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.btn-cancel:hover {
+  background: #fafafa;
+  border-color: var(--border-hover);
+}
+
+.btn-submit {
+  padding: 12px 32px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--primary);
+  color: #fff;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  box-shadow: var(--shadow-green);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-submit:hover:not(:disabled) {
+  background: var(--primary-dark);
+}
+
+.btn-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Spinner inside button */
+.btn-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .job-form-card {
+    padding: 24px 20px;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}

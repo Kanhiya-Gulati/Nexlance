@@ -1,0 +1,456 @@
+/* ============================================================
+   MY APPLICATIONS PAGE — Freelancer View (Upwork / Fiverr)
+   ============================================================ */
+
+/* ── CSS Extras (warning colours not in root) ────────────── */
+:root {
+  --warning:    #f59e0b;
+  --warning-bg: #fef3c7;
+  --radius-sm:  6px;
+  --shadow-xs:  0 1px 3px rgba(0,0,0,0.06);
+}
+
+/* ── Page Shell ─────────────────────────────────────────── */
+.my-applications-page {
+  background: var(--bg-page);
+  min-height: 100vh;
+}
+
+.my-apps-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 24px 80px;
+}
+
+/* ── Page Header ────────────────────────────────────────── */
+.my-apps-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.my-apps-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.3px;
+}
+
+/* Browse Jobs CTA */
+.my-apps-browse-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 20px;
+  background: var(--primary);
+  color: #fff;
+  border-radius: var(--radius-full);
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: var(--transition);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.my-apps-browse-btn:hover {
+  background: var(--primary-dark);
+  box-shadow: var(--shadow-green);
+}
+
+/* ── Stats Row ──────────────────────────────────────────── */
+.my-apps-stat-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.my-apps-stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-xs);
+  white-space: nowrap;
+}
+
+.my-apps-stat-number {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.my-apps-stat-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* ── Filter Row ─────────────────────────────────────────── */
+.ma-filter-row,
+.my-apps-filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.ma-filter-btn,
+.filter-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-full);
+  padding: 7px 16px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  font-family: inherit;
+}
+
+.ma-filter-btn:hover,
+.filter-tab:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.ma-filter-btn.active,
+.filter-tab--active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+  font-weight: 700;
+}
+
+.filter-tab__count {
+  background: rgba(255,255,255,0.25);
+  color: inherit;
+  border-radius: var(--radius-full);
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 1px 7px;
+  min-width: 20px;
+  text-align: center;
+}
+
+.filter-tab--active .filter-tab__count {
+  background: rgba(255,255,255,0.3);
+  color: #fff;
+}
+
+/* ── Applications List ──────────────────────────────────── */
+.ma-list,
+.my-apps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ── Application Card ───────────────────────────────────── */
+.ma-card,
+.app-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 22px 24px;
+  box-shadow: var(--shadow-card);
+  transition: var(--transition);
+}
+
+.ma-card:hover,
+.app-card:hover {
+  box-shadow: var(--shadow-hover);
+  border-color: var(--border-hover);
+  transform: translateY(-1px);
+}
+
+/* Two-column card layout */
+.ma-card-layout,
+.app-card__main {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.ma-card-info,
+.app-card__info {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Job Title Link */
+.ma-job-title,
+.app-card__job-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-decoration: none;
+  display: block;
+  margin-bottom: 8px;
+  transition: var(--transition);
+  line-height: 1.35;
+}
+
+.ma-job-title:hover,
+.app-card__job-title:hover {
+  color: var(--primary);
+}
+
+/* Meta row */
+.ma-meta,
+.app-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.ma-meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.ma-meta-item svg {
+  flex-shrink: 0;
+  color: var(--text-muted);
+}
+
+/* Status Badge */
+.ma-status-badge,
+.app-status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+}
+
+/* Pending */
+.ma-status-badge.status-pending,
+.app-status-badge.app-status--pending,
+.badge--warning {
+  background: var(--warning-bg);
+  color: var(--warning);
+}
+
+/* Accepted */
+.ma-status-badge.status-accepted,
+.app-status-badge.app-status--accepted,
+.badge--success {
+  background: var(--success-bg);
+  color: var(--success);
+}
+
+/* Rejected */
+.ma-status-badge.status-rejected,
+.app-status-badge.app-status--rejected,
+.badge--error {
+  background: var(--error-bg);
+  color: var(--error);
+}
+
+/* Withdrawn / Info */
+.ma-status-badge.status-withdrawn,
+.app-status-badge.app-status--withdrawn,
+.badge--info {
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+/* Generic badge base */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: capitalize;
+  letter-spacing: 0.3px;
+}
+
+/* Cover letter preview (2-line clamp) */
+.ma-cover-preview,
+.app-card__cover-preview {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  line-height: 1.6;
+  margin-top: 6px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ── Card Right: Actions ────────────────────────────────── */
+.ma-card-actions,
+.app-card__right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.app-card__bid {
+  font-size: 0.83rem;
+  color: var(--text-secondary);
+}
+
+/* View / Detail Button */
+.ma-view-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  background: var(--bg-card);
+  color: var(--primary);
+  border: 1.5px solid var(--primary);
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  transition: var(--transition);
+  font-family: inherit;
+  white-space: nowrap;
+}
+
+.ma-view-btn:hover {
+  background: var(--primary);
+  color: #fff;
+  box-shadow: var(--shadow-green);
+}
+
+/* Bid amount in card */
+.ma-bid-amount {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+/* Feedback block */
+.app-card__feedback {
+  margin-top: 16px;
+  padding: 12px 16px;
+  background: var(--bg-page);
+  border-radius: var(--radius);
+  border-left: 3px solid var(--primary-light);
+}
+
+.app-card__feedback-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.app-card__feedback p {
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+/* Empty state */
+.my-apps-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 24px;
+  text-align: center;
+  gap: 12px;
+}
+
+.my-apps-empty-icon {
+  font-size: 3rem;
+  margin-bottom: 8px;
+}
+
+.my-apps-empty h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.my-apps-empty p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* ════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .my-apps-inner {
+    padding: 24px 16px 60px;
+  }
+
+  .my-apps-header {
+    flex-direction: column;
+  }
+
+  .ma-card-layout,
+  .app-card__main {
+    flex-direction: column;
+  }
+
+  .ma-card-actions,
+  .app-card__right {
+    align-items: flex-start;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .ma-view-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .my-apps-stat-row {
+    gap: 8px;
+  }
+
+  .ma-filter-row,
+  .my-apps-filters {
+    gap: 6px;
+  }
+
+  .ma-card,
+  .app-card {
+    padding: 16px;
+  }
+}
+
+/* ── Completed Badge ───────────────────────────────────── */
+.badge--completed {
+  background: rgba(16, 185, 129, 0.12);
+  color: #059669;
+  font-weight: 600;
+}

@@ -1,0 +1,209 @@
+/* ============================================================
+   SPINNER — Premium loading indicators
+   ============================================================ */
+
+/* ── Fullpage / Section Overlay Wrapper ────────────────────── */
+.spinner-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(245, 245, 245, 0.75);
+  backdrop-filter: blur(4px);
+  animation: fadeIn 0.2s ease;
+}
+
+.spinner-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  width: 100%;
+  min-height: 240px;
+}
+
+.spinner-inline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* ── Ring Spinner ──────────────────────────────────────────── */
+.spinner-ring {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spinner-ring-svg {
+  animation: spin 0.85s linear infinite;
+}
+
+/* Size variants */
+.spinner-ring--xs .spinner-ring-svg { width: 16px; height: 16px; }
+.spinner-ring--sm .spinner-ring-svg { width: 24px; height: 24px; }
+.spinner-ring--md .spinner-ring-svg { width: 40px; height: 40px; }
+.spinner-ring--lg .spinner-ring-svg { width: 56px; height: 56px; }
+.spinner-ring--xl .spinner-ring-svg { width: 72px; height: 72px; }
+
+/* Ring track */
+.spinner-ring-track {
+  fill: none;
+  stroke: rgba(29, 191, 115, 0.18);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+/* Ring fill (animated arc) */
+.spinner-ring-arc {
+  fill: none;
+  stroke: var(--primary);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 60 100;
+  stroke-dashoffset: 0;
+  transform-origin: center;
+}
+
+/* Thicker for larger sizes */
+.spinner-ring--lg .spinner-ring-track,
+.spinner-ring--lg .spinner-ring-arc,
+.spinner-ring--xl .spinner-ring-track,
+.spinner-ring--xl .spinner-ring-arc {
+  stroke-width: 4;
+}
+
+.spinner-ring--xs .spinner-ring-track,
+.spinner-ring--xs .spinner-ring-arc,
+.spinner-ring--sm .spinner-ring-track,
+.spinner-ring--sm .spinner-ring-arc {
+  stroke-width: 2.5;
+}
+
+/* Color variants */
+.spinner-ring--white .spinner-ring-track {
+  stroke: rgba(255, 255, 255, 0.25);
+}
+
+.spinner-ring--white .spinner-ring-arc {
+  stroke: #ffffff;
+}
+
+.spinner-ring--dark .spinner-ring-track {
+  stroke: rgba(64, 65, 69, 0.15);
+}
+
+.spinner-ring--dark .spinner-ring-arc {
+  stroke: var(--secondary);
+}
+
+/* ── CSS-only fallback ring (no SVG) ──────────────────────── */
+.spinner-css {
+  display: inline-block;
+  border: 3px solid rgba(29, 191, 115, 0.2);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+.spinner-css--xs  { width: 16px; height: 16px; border-width: 2px; }
+.spinner-css--sm  { width: 24px; height: 24px; border-width: 2.5px; }
+.spinner-css--md  { width: 40px; height: 40px; border-width: 3px; }
+.spinner-css--lg  { width: 56px; height: 56px; border-width: 4px; }
+.spinner-css--xl  { width: 72px; height: 72px; border-width: 5px; }
+
+.spinner-css--white {
+  border-color: rgba(255, 255, 255, 0.25);
+  border-top-color: #ffffff;
+}
+
+/* ── Spinner label ─────────────────────────────────────────── */
+.spinner-label {
+  display: block;
+  margin-top: 14px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  letter-spacing: 0.01em;
+  text-align: center;
+}
+
+/* ── Pulsing Dots Variant ──────────────────────────────────── */
+.spinner-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.spinner-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--primary);
+  animation: dotPulse 1.4s ease-in-out infinite;
+}
+
+.spinner-dot:nth-child(1) { animation-delay: 0s; }
+.spinner-dot:nth-child(2) { animation-delay: 0.2s; }
+.spinner-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes dotPulse {
+  0%, 80%, 100% {
+    transform: scale(0.6);
+    opacity: 0.4;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Dot size variants */
+.spinner-dots--sm .spinner-dot { width: 6px; height: 6px; gap: 4px; }
+.spinner-dots--lg .spinner-dot { width: 12px; height: 12px; }
+.spinner-dots--white .spinner-dot { background: #ffffff; }
+
+/* ── Skeleton Bar (inline) ─────────────────────────────────── */
+.spinner-skeleton-bar {
+  height: 14px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(
+    90deg,
+    var(--border) 25%,
+    #ececec 50%,
+    var(--border) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* ── Centered page spinner (convenience) ───────────────────── */
+.spinner-page-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - var(--navbar-height));
+  gap: 16px;
+}
+
+.spinner-page-center .spinner-label {
+  margin-top: 0;
+}
+
+/* ── Button-embedded spinner ───────────────────────────────── */
+.btn-spinner {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-spinner .spinner-css--sm {
+  border-color: rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+}

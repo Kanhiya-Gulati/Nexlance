@@ -1,0 +1,363 @@
+/* ============================================================
+   FOOTER — Fiverr-style dark multi-column footer
+   ============================================================ */
+
+/* ── Footer Base ───────────────────────────────────────────── */
+.footer {
+  background: var(--bg-dark);
+  color: #c5c6c9;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+/* ── Footer Main Body ──────────────────────────────────────── */
+.footer-main {
+  padding: 56px 0 40px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ── Footer Grid ───────────────────────────────────────────── */
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+  gap: 40px 32px;
+}
+
+/* ── Brand Column ──────────────────────────────────────────── */
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.footer-logo {
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: var(--primary);
+  letter-spacing: -0.03em;
+  line-height: 1;
+  text-decoration: none;
+  display: inline-block;
+  transition: opacity 0.15s ease;
+  user-select: none;
+}
+
+.footer-logo:hover {
+  opacity: 0.85;
+}
+
+.footer-tagline {
+  color: #95979d;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  max-width: 260px;
+}
+
+/* ── Social icons ──────────────────────────────────────────── */
+.footer-social {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.footer-social-link {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #95979d;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: var(--transition-fast);
+  cursor: pointer;
+}
+
+.footer-social-link:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+/* ── Link Columns ──────────────────────────────────────────── */
+.footer-column {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.footer-column-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 4px;
+}
+
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-link {
+  color: #95979d;
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 400;
+  transition: color 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.footer-link:hover {
+  color: #ffffff;
+}
+
+.footer-link-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 6px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 0.6rem;
+  font-weight: 700;
+  border-radius: var(--radius-full);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ── Newsletter (inside brand column) ─────────────────────── */
+.footer-newsletter {
+  margin-top: 4px;
+}
+
+.footer-newsletter-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.footer-newsletter-form {
+  display: flex;
+  gap: 0;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.footer-newsletter-input {
+  flex: 1;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.07);
+  border: none;
+  color: #ffffff;
+  font-size: 0.8rem;
+  outline: none;
+  min-width: 0;
+}
+
+.footer-newsletter-input::placeholder {
+  color: #6b6d72;
+}
+
+.footer-newsletter-input:focus {
+  background: rgba(255, 255, 255, 0.10);
+}
+
+.footer-newsletter-btn {
+  padding: 10px 14px;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background 0.15s ease;
+}
+
+.footer-newsletter-btn:hover {
+  background: var(--primary-dark);
+}
+
+/* ── App Badges ────────────────────────────────────────────── */
+.footer-apps {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.footer-app-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-sm);
+  color: #c5c6c9;
+  text-decoration: none;
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: var(--transition-fast);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.footer-app-badge:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.footer-app-badge-store {
+  font-size: 0.6rem;
+  font-weight: 400;
+  opacity: 0.7;
+  display: block;
+  line-height: 1;
+}
+
+.footer-app-badge-name {
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: block;
+  line-height: 1.2;
+}
+
+/* ── Bottom Bar ────────────────────────────────────────────── */
+.footer-bottom {
+  padding: 20px 0;
+}
+
+.footer-bottom-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.footer-copyright {
+  color: #62646a;
+  font-size: 0.8rem;
+  font-weight: 400;
+}
+
+.footer-bottom-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.footer-bottom-link {
+  color: #62646a;
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 400;
+  transition: color 0.15s ease;
+}
+
+.footer-bottom-link:hover {
+  color: #c5c6c9;
+}
+
+.footer-bottom-separator {
+  color: #404145;
+  font-size: 0.75rem;
+}
+
+.footer-bottom-currency {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #62646a;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: color 0.15s ease;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.footer-bottom-currency:hover {
+  color: #c5c6c9;
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* ── Responsive ────────────────────────────────────────────── */
+@media (max-width: 1100px) {
+  .footer-grid {
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 32px 24px;
+  }
+
+  .footer-brand {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 24px;
+    align-items: flex-start;
+  }
+
+  .footer-tagline {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer-main {
+    padding: 40px 0 32px;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 28px 20px;
+  }
+
+  .footer-brand {
+    grid-column: 1 / -1;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .footer-bottom-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .footer-bottom-links {
+    gap: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .footer-social {
+    gap: 8px;
+  }
+
+  .footer-bottom-links {
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+}

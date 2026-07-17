@@ -1,0 +1,644 @@
+/* ============================================================
+   Register.css  —  Premium Fiverr / Upwork-style Registration
+   ============================================================ */
+
+/* ---------- Page wrapper ---------- */
+.register-page {
+  display: flex;
+  min-height: 100vh;
+  background: var(--bg-page, #f5f5f5);
+  overflow: hidden;
+  padding-top: var(--navbar-height); /* Keep card content below the fixed header */
+}
+
+/* ==========================================
+   LEFT DECORATIVE PANEL
+   ========================================== */
+.register-decor-panel {
+  position: relative;
+  width: 42%;
+  min-height: 100vh;
+  background: linear-gradient(145deg, #0d7a4e 0%, #1dbf73 55%, #2ed47a 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.register-decor-panel .decor-shapes {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.register-decor-panel .decor-shape {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  animation: floatShapeReg 9s ease-in-out infinite;
+}
+
+.register-decor-panel .decor-shape-1 {
+  width: 360px;
+  height: 360px;
+  top: -100px;
+  left: -90px;
+  animation-delay: 0s;
+}
+
+.register-decor-panel .decor-shape-2 {
+  width: 200px;
+  height: 200px;
+  bottom: 40px;
+  right: -40px;
+  animation-delay: 2.5s;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.register-decor-panel .decor-shape-3 {
+  width: 110px;
+  height: 110px;
+  bottom: 28%;
+  left: 12%;
+  animation-delay: 4.5s;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.register-decor-panel .decor-shape-4 {
+  width: 55px;
+  height: 55px;
+  top: 38%;
+  right: 18%;
+  animation-delay: 6.5s;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+@keyframes floatShapeReg {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50%       { transform: translateY(-16px) scale(1.03); }
+}
+
+.register-decor-panel .decor-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 48px 44px;
+  max-width: 380px;
+}
+
+.register-decor-panel .decor-logo {
+  display: inline-block;
+  font-size: 1.9rem;
+  font-weight: 800;
+  letter-spacing: -1px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  border-radius: 14px;
+  padding: 8px 22px;
+  margin-bottom: 32px;
+  backdrop-filter: blur(6px);
+}
+
+.register-decor-panel .decor-heading {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.3;
+  margin-bottom: 16px;
+}
+
+.register-decor-panel .decor-text {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.82);
+  line-height: 1.6;
+  margin-bottom: 40px;
+}
+
+/* Stats grid on decor panel */
+.decor-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.decor-stat {
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 10px;
+  padding: 14px 8px;
+  backdrop-filter: blur(4px);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: all 0.2s ease;
+}
+
+.decor-stat:hover {
+  background: rgba(255, 255, 255, 0.22);
+  transform: translateY(-3px);
+}
+
+.decor-stat-value {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1;
+}
+
+.decor-stat-label {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ==========================================
+   RIGHT FORM PANEL
+   ========================================== */
+.register-form-panel {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 40px 24px;
+  background: var(--bg-page, #f5f5f5);
+  overflow-y: auto;
+}
+
+/* Register Card */
+.register-card {
+  width: 100%;
+  max-width: 520px;
+  background: var(--bg-card, #fff);
+  border: 1px solid var(--border, #e4e5e7);
+  border-radius: var(--radius-xl, 20px);
+  padding: 44px 44px;
+  box-shadow: var(--shadow-card, 0 2px 8px rgba(0,0,0,0.06));
+  animation: slideInReg 0.4s ease both;
+}
+
+@keyframes slideInReg {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Card Header */
+.register-card-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.register-logo {
+  display: inline-block;
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: var(--primary, #1dbf73);
+  text-decoration: none;
+  margin-bottom: 18px;
+  transition: color 0.2s ease;
+}
+
+.register-logo:hover {
+  color: var(--primary-dark, #19a463);
+}
+
+.register-title {
+  font-size: 1.65rem;
+  font-weight: 700;
+  color: var(--text-primary, #404145);
+  margin: 0 0 8px;
+  letter-spacing: -0.4px;
+  line-height: 1.2;
+}
+
+.register-subtitle {
+  font-size: 0.92rem;
+  color: var(--text-muted, #95979d);
+  margin: 0;
+}
+
+/* ==========================================
+   ROLE SELECTOR  (Fiverr-style)
+   ========================================== */
+.role-selector {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 2px;
+}
+
+.role-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 18px 14px 16px;
+  border: 2px solid var(--border, #e4e5e7);
+  border-radius: var(--radius-lg, 14px);
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  text-align: center;
+  outline: none;
+}
+
+.role-card:hover {
+  border-color: var(--primary, #1dbf73);
+  background: var(--primary-light, #e9f9f0);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(29, 191, 115, 0.14);
+}
+
+.role-card.role-card-active {
+  border-color: var(--primary, #1dbf73);
+  background: var(--primary-light, #e9f9f0);
+  box-shadow: 0 0 0 3px rgba(29, 191, 115, 0.18), 0 4px 16px rgba(29, 191, 115, 0.14);
+}
+
+/* Checkmark badge for active role */
+.role-card.role-card-active::after {
+  content: '\2713';
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 20px;
+  height: 20px;
+  background: var(--primary, #1dbf73);
+  color: #fff;
+  border-radius: 50%;
+  font-size: 0.7rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 20px;
+  text-align: center;
+  animation: popIn 0.2s ease;
+}
+
+@keyframes popIn {
+  from { transform: scale(0); }
+  to   { transform: scale(1); }
+}
+
+.role-icon {
+  font-size: 2rem;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.role-label {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--text-primary, #404145);
+  line-height: 1.2;
+}
+
+.role-desc {
+  font-size: 0.8rem;
+  color: var(--text-muted, #95979d);
+  font-weight: 400;
+}
+
+.role-card.role-card-active .role-label {
+  color: var(--primary-dark, #19a463);
+}
+
+/* ==========================================
+   FORM
+   ========================================== */
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Reuse .form-group, .form-label, .form-input, .form-error,
+   .input-wrapper, .input-icon, .password-toggle, .btn-spinner,
+   .btn-submit from Login.css (shared via global scope or copy). */
+
+/* Skills hint text */
+.form-hint {
+  font-size: 0.78rem;
+  color: var(--text-muted, #95979d);
+  margin-top: 2px;
+}
+
+/* ==========================================
+   TERMS CHECKBOX
+   ========================================== */
+.terms-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  color: var(--text-secondary, #62646a);
+  line-height: 1.5;
+  user-select: none;
+  position: relative;
+}
+
+.terms-checkbox input[type='checkbox'] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.terms-checkbox .checkmark {
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid var(--border-hover, #b5b6ba);
+  border-radius: 4px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.terms-checkbox input[type='checkbox']:checked ~ .checkmark {
+  background: var(--primary, #1dbf73);
+  border-color: var(--primary, #1dbf73);
+}
+
+.terms-checkbox input[type='checkbox']:checked ~ .checkmark::after {
+  content: '';
+  display: block;
+  width: 5px;
+  height: 9px;
+  border: 2px solid #fff;
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg) translateY(-1px);
+}
+
+.terms-link {
+  color: var(--primary, #1dbf73);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.terms-link:hover {
+  color: var(--primary-dark, #19a463);
+  text-decoration: underline;
+}
+
+/* ==========================================
+   SUBMIT BUTTON  (mirrors Login)
+   ========================================== */
+.register-form .btn-submit,
+.btn-submit {
+  width: 100%;
+  height: 48px;
+  background: var(--primary, #1dbf73);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius, 8px);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.35s ease;
+  margin-top: 4px;
+}
+
+.register-form .btn-submit:hover:not(:disabled),
+.btn-submit:hover:not(:disabled) {
+  background: var(--primary-dark, #19a463);
+  box-shadow: 0 4px 20px rgba(29, 191, 115, 0.25);
+  transform: translateY(-1px);
+}
+
+.register-form .btn-submit:active:not(:disabled),
+.btn-submit:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.register-form .btn-submit:disabled,
+.btn-submit:disabled {
+  opacity: 0.72;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2.5px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spinBtn 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes spinBtn {
+  to { transform: rotate(360deg); }
+}
+
+/* ==========================================
+   FOOTER / LOGIN LINK
+   ========================================== */
+.register-footer {
+  text-align: center;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border, #e4e5e7);
+}
+
+.register-footer p {
+  font-size: 0.9rem;
+  color: var(--text-muted, #95979d);
+  margin: 0;
+}
+
+/* auth-link shared with Login */
+.auth-link {
+  color: var(--primary, #1dbf73);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.auth-link:hover {
+  color: var(--primary-dark, #19a463);
+  text-decoration: underline;
+}
+
+/* ==========================================
+   SHARED FORM ELEMENTS  (duplicated here for
+   standalone use; Login also defines these)
+   ========================================== */
+.register-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.register-form .form-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary, #404145);
+  letter-spacing: 0.01em;
+}
+
+.register-form .input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.register-form .input-icon {
+  position: absolute;
+  left: 14px;
+  color: var(--text-muted, #95979d);
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  transition: color 0.2s ease;
+  z-index: 1;
+}
+
+.register-form .form-input {
+  width: 100%;
+  height: 46px;
+  padding: 0 44px 0 48px;
+  border: 1.5px solid var(--border, #e4e5e7);
+  border-radius: var(--radius, 8px);
+  background: #fff;
+  font-size: 0.9375rem;
+  color: var(--text-primary, #404145);
+  outline: none;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.register-form .form-input::placeholder {
+  color: var(--text-muted, #95979d);
+  font-size: 0.9rem;
+}
+
+.register-form .form-input:hover {
+  border-color: var(--border-hover, #b5b6ba);
+}
+
+.register-form .form-input:focus {
+  border-color: var(--border-focus, #1dbf73);
+  box-shadow: 0 0 0 3px rgba(29, 191, 115, 0.12);
+}
+
+.register-form .input-wrapper:focus-within .input-icon {
+  color: var(--primary, #1dbf73);
+}
+
+.register-form .form-group.has-error .form-input {
+  border-color: var(--error, #e53935);
+  background: var(--error-bg, #fdecea);
+}
+
+.register-form .form-group.has-error .form-input:focus {
+  box-shadow: 0 0 0 3px rgba(229, 57, 53, 0.12);
+}
+
+.register-form .form-error,
+.form-error {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.8125rem;
+  color: var(--error, #e53935);
+  font-weight: 500;
+  margin-top: 2px;
+  animation: errorShake 0.3s ease;
+}
+
+.register-form .form-error::before,
+.form-error::before {
+  content: "\26A0";
+  font-size: 0.75rem;
+}
+
+@keyframes errorShake {
+  0%, 100% { transform: translateX(0); }
+  25%       { transform: translateX(-4px); }
+  75%       { transform: translateX(4px); }
+}
+
+.register-form .password-toggle {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted, #95979d);
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  z-index: 1;
+}
+
+.register-form .password-toggle:hover {
+  color: var(--primary, #1dbf73);
+  background: var(--primary-light, #e9f9f0);
+}
+
+/* ==========================================
+   RESPONSIVE
+   ========================================== */
+@media (max-width: 900px) {
+  .register-decor-panel {
+    display: none;
+  }
+
+  .register-form-panel {
+    padding: 32px 16px;
+  }
+
+  .register-card {
+    padding: 36px 28px;
+    border-radius: var(--radius-lg, 14px);
+  }
+}
+
+@media (max-width: 560px) {
+  .register-card {
+    padding: 28px 18px;
+    border-radius: var(--radius-md, 10px);
+  }
+
+  .register-title {
+    font-size: 1.4rem;
+  }
+
+  .role-selector {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .role-icon {
+    font-size: 1.6rem;
+  }
+
+  .decor-stats {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+}
