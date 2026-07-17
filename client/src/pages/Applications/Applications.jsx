@@ -22,6 +22,14 @@ const Applications = () => {
   const [actionLoading, setActionLoading] = useState(null);
   const [startingChat, setStartingChat] = useState(false);
   const [completingProject, setCompletingProject] = useState(false);
+  const [expandedLetters, setExpandedLetters] = useState({});
+
+  const toggleLetter = (appId) => {
+    setExpandedLetters(prev => ({
+      ...prev,
+      [appId]: !prev[appId]
+    }));
+  };
 
   const fetchData = async () => {
     try {
@@ -249,7 +257,32 @@ const Applications = () => {
                   {app.coverLetter && (
                     <div className="app-cover-letter">
                       <h4 className="app-section-label">Cover Letter</h4>
-                      <p className="app-cover-text">{app.coverLetter}</p>
+                      <p className={`app-cover-text ${expandedLetters[app._id] ? 'expanded' : ''}`}>
+                        {app.coverLetter}
+                      </p>
+                      {app.coverLetter.length > 220 && (
+                        <button
+                          type="button"
+                          className="app-cover-readmore"
+                          onClick={() => toggleLetter(app._id)}
+                          style={{
+                            background: 'none',
+                            border: 'none',
+                            color: 'var(--primary)',
+                            fontWeight: '700',
+                            fontSize: '0.85rem',
+                            padding: '4px 0 0 0',
+                            cursor: 'pointer',
+                            marginTop: '6px',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '4px',
+                            transition: 'var(--transition)'
+                          }}
+                        >
+                          {expandedLetters[app._id] ? 'Show Less ▲' : 'Read More ▼'}
+                        </button>
+                      )}
                     </div>
                   )}
 
