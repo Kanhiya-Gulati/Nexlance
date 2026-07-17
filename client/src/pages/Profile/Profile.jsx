@@ -343,11 +343,11 @@ const Profile = () => {
                     <span className="upwork-stat-label">Freelancers Hired</span>
                   </div>
                   <div className="upwork-stat-card">
-                    <span className="upwork-stat-value">₹{(totalMoneySpent || 0).toLocaleString()}</span>
+                    <span className="upwork-stat-value">${(totalMoneySpent || 0).toLocaleString()}</span>
                     <span className="upwork-stat-label">Total Money Spent</span>
                   </div>
                   <div className="upwork-stat-card">
-                    <span className="upwork-stat-value">₹{(avgBudget || 0).toLocaleString()}</span>
+                    <span className="upwork-stat-value">${(avgBudget || 0).toLocaleString()}</span>
                     <span className="upwork-stat-label">Avg Project Budget</span>
                   </div>
                 </div>
@@ -362,7 +362,7 @@ const Profile = () => {
                       <div key={job._id} className="profile-active-job-item">
                         <div className="job-item-header">
                           <Link to={`/jobs/${job._id}`} className="job-item-title">{job.title}</Link>
-                          <span className="job-item-budget">₹{(job.budgetMin || 0).toLocaleString()} - ₹{(job.budgetMax || 0).toLocaleString()}</span>
+                          <span className="job-item-budget">${(job.budgetMin || 0).toLocaleString()} - ${(job.budgetMax || 0).toLocaleString()}</span>
                         </div>
                         <div className="job-item-footer">
                           <span>📅 Posted: {formatDate(job.createdAt)}</span>
@@ -385,7 +385,7 @@ const Profile = () => {
                       <div key={job._id} className="profile-active-job-item completed">
                         <div className="job-item-header">
                           <Link to={`/jobs/${job._id}`} className="job-item-title">{job.title}</Link>
-                          <span className="job-item-budget">Budget: ₹{(job.budgetMin || 0).toLocaleString()} - ₹{(job.budgetMax || 0).toLocaleString()}</span>
+                          <span className="job-item-budget">Budget: ${(job.budgetMin || 0).toLocaleString()} - ${(job.budgetMax || 0).toLocaleString()}</span>
                         </div>
                         <div className="job-item-footer">
                           <span>✅ Completed on: {formatDate(job.updatedAt)}</span>
@@ -412,13 +412,13 @@ const Profile = () => {
                 <div className="upwork-rates-grid">
                   <div className="upwork-rate-card">
                     <span className="upwork-rate-val">
-                      {profile.hourlyRate ? `₹${Number(profile.hourlyRate).toLocaleString()}/hr` : 'Not set'}
+                      {profile.hourlyRate ? `$${Number(profile.hourlyRate).toLocaleString()}/hr` : 'Not set'}
                     </span>
                     <span className="upwork-rate-label">Hourly Rate</span>
                   </div>
                   <div className="upwork-rate-card">
                     <span className="upwork-rate-val">
-                      {profile.minProjectBudget ? `₹${Number(profile.minProjectBudget).toLocaleString()}` : 'Not set'}
+                      {profile.minProjectBudget ? `$${Number(profile.minProjectBudget).toLocaleString()}` : 'Not set'}
                     </span>
                     <span className="upwork-rate-label">Min Project Budget</span>
                   </div>
@@ -489,7 +489,7 @@ const Profile = () => {
                             }}
                           />
                           {proj.cost > 0 && (
-                            <span className="upwork-portfolio-cost-tag">₹{(proj.cost || 0).toLocaleString()}</span>
+                            <span className="upwork-portfolio-cost-tag">${(proj.cost || 0).toLocaleString()}</span>
                           )}
                         </div>
                         <div className="upwork-portfolio-info">

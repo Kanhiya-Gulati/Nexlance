@@ -463,19 +463,19 @@ const EditProfile = () => {
               <h2 className="ep-section-title">Work & Project Preferences</h2>
               <div className="ep-grid">
                 <div className="ep-field">
-                  <label className="ep-label">Hourly Rate (₹/hour)</label>
+                  <label className="ep-label">Hourly Rate ($/hour)</label>
                   <input
                     type="number"
                     name="hourlyRate"
                     value={formData.hourlyRate}
                     onChange={handleChange}
                     className="ep-input"
-                    placeholder="e.g. 500"
+                    placeholder="e.g. 50"
                     min="0"
                   />
                 </div>
                 <div className="ep-field">
-                  <label className="ep-label">Minimum Project Budget (₹)</label>
+                  <label className="ep-label">Minimum Project Budget ($)</label>
                   <input
                     type="number"
                     name="minProjectBudget"
@@ -589,14 +589,14 @@ const EditProfile = () => {
                     />
                   </div>
                   <div className="ep-field">
-                    <label className="ep-label">Project Value / Cost (₹)</label>
+                    <label className="ep-label">Project Value / Cost ($)</label>
                     <input
                       type="number"
                       name="cost"
                       value={newProject.cost}
                       onChange={handleProjectChange}
                       className="ep-input"
-                      placeholder="e.g. 15000"
+                      placeholder="e.g. 150"
                       min="0"
                     />
                   </div>
@@ -685,7 +685,7 @@ const EditProfile = () => {
                         <div className="ep-project-item-meta" style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', marginBottom: '8px', fontSize: '0.85rem' }}>
                           {proj.cost > 0 && (
                             <div className="ep-project-item-cost">
-                              <strong>Value:</strong> ₹{proj.cost.toLocaleString()}
+                              <strong>Value:</strong> ${proj.cost.toLocaleString()}
                             </div>
                           )}
                           {proj.link && (
