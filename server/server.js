@@ -110,10 +110,11 @@ const PORT = process.env.PORT || 5000;
  * Connect to MongoDB and then start listening for HTTP requests.
  * If the DB connection fails, the process exits (handled in connectDB).
  */
-connectDB().then(() => {
-  server.listen(PORT, () => {
-    console.log(
-      `🚀 NEXLANCE server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`
-    );
-  });
+connectDB();
+
+server.listen(PORT, () => {
+  console.log(
+    `🚀 NEXLANCE server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`
+  );
 });
+
