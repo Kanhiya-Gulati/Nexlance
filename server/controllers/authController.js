@@ -867,6 +867,104 @@ const setRole = async (req, res, next) => {
   }
 };
 
+/**
+ * @desc    Firebase Auth Sync / Login / Register
+ * @route   POST /api/auth/firebase
+ * @access  Public
+ */
+const firebaseAuth = async (req, res, next) => {
+  try {
+    const { email, name, firebaseUid, role, skills } = req.body;
+
+    if (!email || !firebaseUid) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email and Firebase UID are required',
+      });
+    }
+
+    let user = await User.findOne({ $or: [{ email: email.toLowerCase() }, { firebaseUid }] });
+
+    if (user) {
+      if (!user.firebaseUid) {
+        user.firebaseUid = firebaseUid;
+      }
+      user.isEmailVerified = true;
+      if (!user.role && role) {
+        user.role = role;
+      }
+      if (skills && Array.isArray(skills) && user.role === 'freelancer') {
+        user.skills = skills;
+      }
+      await user.save();
+
+      const token = generateToken(user._id);
+      const userResponse = user.toObject();
+      delete userResponse.password;
+
+      return res.status(200).json({
+        success: true,
+        token,
+        user: userResponse,
+        needsRole: !user.role,
+      });
+    }
+
+    // Create new user if not found
+    const newUser = await User.create({
+      name: name || email.split('@')[0],
+      email: email.toLowerCase(),
+      firebaseUid,
+      authProvider: 'firebase',
+      role: role || null,
+      skills: Array.isArray(skills) ? skills : [],
+      isEmailVerified: true,
+      avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(name || email)}`,
+    });
+
+    const token = generateToken(newUser._id);
+    const userResponse = newUser.toObject();
+    delete userResponse.password;
+
+    // Send Welcome / Congratulations email in background
+    sendEmail({
+      to: newUser.email,
+      subject: 'Welcome to NEXLANCE! 🎉 Account Created Successfully',
+      html: `<div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; background: #f8fafc; padding: 40px 20px;">
+  <div style="background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.07);">
+    <div style="background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); padding: 32px; text-align: center;">
+      <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: 700; letter-spacing: -0.5px;">Nexlance</h1>
+      <p style="color: rgba(255,255,255,0.85); margin: 8px 0 0; font-size: 14px;">Freelance Marketplace</p>
+    </div>
+    <div style="padding: 40px 32px;">
+      <h2 style="color: #1e293b; margin: 0 0 8px; font-size: 22px;">Congratulations & Welcome! 🎉</h2>
+      <p style="color: #64748b; font-size: 15px; line-height: 1.6; margin: 0 0 24px;">Hi <strong>${newUser.name}</strong>,<br/><br/>Welcome to Nexlance! Your account has been successfully created. You can now explore projects, post jobs, or connect with top talent.</p>
+      <div style="background: linear-gradient(135deg, #f0f0ff 0%, #f5f3ff 100%); border-radius: 12px; padding: 20px; text-align: center; margin: 0 0 24px;">
+        <p style="color: #4f46e5; font-size: 16px; margin: 0; font-weight: 700;">Account Role: ${newUser.role ? newUser.role.toUpperCase() : 'USER'}</p>
+      </div>
+      <p style="color: #94a3b8; font-size: 13px; text-align: center; margin: 0 0 24px;">Thank you for joining Nexlance!</p>
+    </div>
+    <div style="background: #f8fafc; padding: 20px 32px; text-align: center; border-top: 1px solid #e2e8f0;">
+      <p style="color: #94a3b8; font-size: 12px; margin: 0;">© 2026 Nexlance. All rights reserved.</p>
+    </div>
+  </div>
+</div>`,
+    }).catch((err) => {
+      console.error('Failed to send welcome email from firebaseAuth:', err.message);
+    });
+
+    res.status(201).json({
+      success: true,
+      token,
+      user: userResponse,
+      needsRole: !newUser.role,
+      message: 'Account created successfully with Firebase',
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   register,
   verifyOtp,
@@ -879,4 +977,5 @@ module.exports = {
   getMe,
   googleAuth,
   setRole,
+  firebaseAuth,
 };
