@@ -6,7 +6,7 @@ import { useToast } from '../../context/ToastContext';
 import './Login.css';
 
 const Login = () => {
-  const { user, login, sendLoginOtp, loginOtp, googleLogin } = useAuth();
+  const { user, login, sendLoginOtp, loginOtp, googleLogin, firebaseGoogleLogin } = useAuth();
   const { showToast } = useToast();
   const navigate = useNavigate();
 
@@ -169,7 +169,7 @@ const Login = () => {
                 setErrors({});
               }}
             >
-              Password Login
+              Firebase Email Login
             </button>
             <button
               type="button"
@@ -342,31 +342,80 @@ const Login = () => {
 
           {/* Google Sign In Button */}
           <div className="google-login-wrapper">
-            <GoogleLogin
-              onSuccess={async (credentialResponse) => {
-                try {
-                  const data = await googleLogin(credentialResponse.credential);
-                  if (data.needsRole) {
-                    showToast(data.message || 'Please select your role.', 'info');
-                    navigate('/select-role');
-                  } else {
-                    showToast(data.message || 'Logged in with Google!', 'success');
-                    const role = data.user?.role;
-                    navigate(role === 'client' ? '/dashboard/client' : '/dashboard/freelancer');
+            {import.meta.env.VITE_GOOGLE_CLIENT_ID ? (
+              <GoogleLogin
+                onSuccess={async (credentialResponse) => {
+                  try {
+                    const data = await googleLogin(credentialResponse.credential);
+                    if (data.needsRole) {
+                      showToast(data.message || 'Please select your role.', 'info');
+                      navigate('/select-role');
+                    } else {
+                      showToast(data.message || 'Logged in with Google!', 'success');
+                      const role = data.user?.role;
+                      navigate(role === 'client' ? '/dashboard/client' : '/dashboard/freelancer');
+                    }
+                  } catch (err) {
+                    showToast(err.response?.data?.message || 'Google login failed.', 'error');
                   }
-                } catch (err) {
-                  showToast(err.response?.data?.message || 'Google login failed.', 'error');
-                }
-              }}
-              onError={() => {
-                showToast('Google login failed. Please try again.', 'error');
-              }}
-              text="continue_with"
-              shape="rectangular"
-              size="large"
-              width="100%"
-              theme="outline"
-            />
+                }}
+                onError={() => {
+                  showToast('Google login failed. Please try again.', 'error');
+                }}
+                text="continue_with"
+                shape="rectangular"
+                size="large"
+                width="100%"
+                theme="outline"
+              />
+            ) : (
+              <button
+                type="button"
+                className="firebase-google-btn"
+                onClick={async () => {
+                  setLoading(true);
+                  try {
+                    const data = await firebaseGoogleLogin();
+                    if (data.needsRole) {
+                      showToast(data.message || 'Please select your role.', 'info');
+                      navigate('/select-role');
+                    } else {
+                      showToast('Logged in with Google!', 'success');
+                      const role = data.user?.role;
+                      navigate(role === 'client' ? '/dashboard/client' : '/dashboard/freelancer');
+                    }
+                  } catch (err) {
+                    showToast(err.message || 'Google login failed.', 'error');
+                  } finally {
+                    setLoading(false);
+                  }
+                }}
+                style={{
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '10px',
+                  padding: '10px 16px',
+                  borderRadius: '8px',
+                  border: '1px solid #dadce0',
+                  background: '#ffffff',
+                  color: '#3c4043',
+                  fontWeight: '500',
+                  cursor: 'pointer',
+                  fontSize: '14px',
+                  transition: 'background-color 0.2s',
+                }}
+              >
+                <svg width="18" height="18" viewBox="0 0 18 18">
+                  <path fill="#4285F4" d="M17.64 9.2c0-.74-.06-1.28-.19-1.84H9v3.34h4.96c-.1.83-.64 2.08-1.84 2.92l-.01.12 2.69 2.08.19.02c1.72-1.58 2.65-3.9 2.65-6.64z"/>
+                  <path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.87-2.22c-.76.53-1.78.9-3.09.9-2.39 0-4.42-1.57-5.15-3.72l-.12.01-2.79 2.16-.04.11C2.38 15.93 5.43 18 9 18z"/>
+                  <path fill="#FBBC05" d="M3.85 10.78c-.2-.59-.31-1.22-.31-1.78s.11-1.19.31-1.78l-.01-.14-2.8-2.17-.09.04C.35 6.13 0 7.51 0 9s.35 2.87.95 4.05l2.9-2.27z"/>
+                  <path fill="#EA4335" d="M9 3.58c1.69 0 2.83.73 3.48 1.34l2.54-2.48C13.46.96 11.43 0 9 0 5.43 0 2.38 2.07.95 4.95l2.89 2.25c.73-2.15 2.76-3.62 5.16-3.62z"/>
+                </svg>
+                <span>Continue with Google</span>
+              </button>
+            )}
           </div>
 
           <div className="login-footer">
