@@ -1,10 +1,19 @@
 import { createContext, useContext, useState, useEffect } from 'react';
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+  signOut,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from 'firebase/auth';
+import { auth } from '../config/firebase';
 import api from '../services/api';
 
 /**
  * AuthContext
- * Provides authentication state (user, token, loading) and methods
- * (login, register, logout, googleLogin, setRole) to the entire application.
+ * Provides Firebase authentication state (user, token, loading) and methods
+ * (login, register, logout, googleLogin, firebaseGoogleLogin, setRole, forgotPassword) to the entire application.
  */
 const AuthContext = createContext(null);
 
@@ -28,7 +37,6 @@ export const AuthProvider = ({ children }) => {
         setUser(res.data.user || res.data);
         setToken(storedToken);
       } catch (err) {
-        // Token is invalid or expired — clear it
         console.error('Auth validation failed:', err.message);
         localStorage.removeItem('token');
         setUser(null);
@@ -42,27 +50,121 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   /**
-   * login - Authenticate a user with email and password.
+   * login - Authenticate a user with Firebase Email and Password.
    */
   const login = async (email, password) => {
-    const res = await api.post('/auth/login', { email, password });
+    let firebaseUid = null;
+
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      firebaseUid = userCredential.user.uid;
+    } catch (fbError) {
+      console.warn('Firebase signIn notice:', fbError.message);
+      if (fbError.code === 'auth/wrong-password' || fbError.code === 'auth/user-not-found' || fbError.code === 'auth/invalid-credential') {
+        throw new Error(fbError.message || 'Invalid email or password');
+      }
+    }
+
+    // Sync with backend API
+    try {
+      const res = firebaseUid
+        ? await api.post('/auth/firebase', { email, firebaseUid })
+        : await api.post('/auth/login', { email, password });
+
+      const data = res.data;
+      if (data.token) {
+        localStorage.setItem('token', data.token);
+        setToken(data.token);
+      }
+      if (data.user) {
+        setUser(data.user);
+      }
+      return data;
+    } catch (err) {
+      // Direct login fallback if firebase endpoint fails
+      const fallbackRes = await api.post('/auth/login', { email, password });
+      const data = fallbackRes.data;
+      if (data.token) {
+        localStorage.setItem('token', data.token);
+        setToken(data.token);
+      }
+      if (data.user) {
+        setUser(data.user);
+      }
+      return data;
+    }
+  };
+
+  /**
+   * register - Create a new user account with Firebase Email and Password.
+   */
+  const register = async (payload) => {
+    let firebaseUid = null;
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, payload.email, payload.password);
+      firebaseUid = userCredential.user.uid;
+    } catch (fbError) {
+      console.warn('Firebase createUser notice:', fbError.message);
+      if (fbError.code === 'auth/email-already-in-use') {
+        throw new Error('An account with this email already exists.');
+      }
+      if (fbError.code === 'auth/weak-password') {
+        throw new Error('Password should be at least 6 characters.');
+      }
+    }
+
+    // Sync with MongoDB backend
+    const syncData = {
+      name: payload.name,
+      email: payload.email,
+      password: payload.password,
+      role: payload.role,
+      skills: payload.skills || [],
+      firebaseUid: firebaseUid || `fb_${Date.now()}`,
+    };
+
+    const res = await api.post('/auth/firebase', syncData);
     const data = res.data;
-    localStorage.setItem('token', data.token);
-    setToken(data.token);
-    setUser(data.user || data);
+
+    if (data.token) {
+      localStorage.setItem('token', data.token);
+      setToken(data.token);
+    }
+    if (data.user) {
+      setUser(data.user);
+    }
     return data;
   };
 
   /**
-   * register - Create a new user account (sends verification OTP).
+   * firebaseGoogleLogin - Authenticate using Firebase Google OAuth popup.
    */
-  const register = async (payload) => {
-    const res = await api.post('/auth/register', payload);
-    return res.data;
+  const firebaseGoogleLogin = async (role = null) => {
+    const provider = new GoogleAuthProvider();
+    const result = await signInWithPopup(auth, provider);
+    const fbUser = result.user;
+
+    const res = await api.post('/auth/firebase', {
+      email: fbUser.email,
+      name: fbUser.displayName || fbUser.email.split('@')[0],
+      firebaseUid: fbUser.uid,
+      role: role,
+    });
+
+    const data = res.data;
+    if (data.token) {
+      localStorage.setItem('token', data.token);
+      setToken(data.token);
+    }
+    if (data.user) {
+      setUser(data.user);
+    }
+    return data;
   };
 
   /**
-   * verifyOtp - Verify registration OTP and log in.
+   * verifyOtp - Verify registration OTP (legacy support).
    */
   const verifyOtp = async (email, otp) => {
     const res = await api.post('/auth/verify-otp', { email, otp });
@@ -74,7 +176,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   /**
-   * resendOtp - Resend verification OTP.
+   * resendOtp - Resend verification OTP (legacy support).
    */
   const resendOtp = async (email) => {
     const res = await api.post('/auth/resend-otp', { email });
@@ -82,7 +184,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   /**
-   * sendLoginOtp - Send OTP code for login.
+   * sendLoginOtp - Send OTP code for login (legacy support).
    */
   const sendLoginOtp = async (email) => {
     const res = await api.post('/auth/send-login-otp', { email });
@@ -90,7 +192,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   /**
-   * loginOtp - Verify login OTP and log in.
+   * loginOtp - Verify login OTP and log in (legacy support).
    */
   const loginOtp = async (email, otp) => {
     const res = await api.post('/auth/login-otp', { email, otp });
@@ -102,15 +204,21 @@ export const AuthProvider = ({ children }) => {
   };
 
   /**
-   * forgotPassword - Send OTP code to reset password.
+   * forgotPassword - Send Firebase password reset email.
    */
   const forgotPassword = async (email) => {
-    const res = await api.post('/auth/forgot-password', { email });
-    return res.data;
+    try {
+      await sendPasswordResetEmail(auth, email);
+      return { success: true, message: 'Password reset link sent to your email via Firebase!' };
+    } catch (fbError) {
+      console.warn('Firebase sendPasswordResetEmail notice:', fbError.message);
+      const res = await api.post('/auth/forgot-password', { email });
+      return res.data;
+    }
   };
 
   /**
-   * resetPassword - Verify OTP and update password.
+   * resetPassword - Update password using OTP (legacy support).
    */
   const resetPassword = async (email, otp, newPassword) => {
     const res = await api.post('/auth/reset-password', { email, otp, newPassword });
@@ -118,21 +226,17 @@ export const AuthProvider = ({ children }) => {
   };
 
   /**
-   * googleLogin - Authenticate or register via Google OAuth.
-   * Sends Google credential (ID token) to backend.
-   * Returns data with needsRole flag if first-time Google user.
+   * googleLogin - Authenticate or register via Google OAuth credential.
    */
   const googleLogin = async (credential) => {
     const res = await api.post('/auth/google', { credential });
     const data = res.data;
 
-    // Store the token (even temporarily for role selection)
     if (data.token) {
       localStorage.setItem('token', data.token);
       setToken(data.token);
     }
 
-    // Only set full user if role is already assigned
     if (!data.needsRole && data.user) {
       setUser(data.user);
     }
@@ -142,7 +246,6 @@ export const AuthProvider = ({ children }) => {
 
   /**
    * setRole - Set role for first-time Google OAuth user.
-   * After role is set, updates user state and completes login.
    */
   const setRole = async (role, password) => {
     const res = await api.post('/auth/set-role', { role, password });
@@ -160,16 +263,21 @@ export const AuthProvider = ({ children }) => {
   };
 
   /**
-   * logout - Clear authentication state and redirect.
+   * logout - Clear Firebase session, stored tokens and state.
    */
-  const logout = () => {
+  const logout = async () => {
+    try {
+      await signOut(auth);
+    } catch (err) {
+      console.error('Firebase signOut error:', err.message);
+    }
     localStorage.removeItem('token');
     setToken(null);
     setUser(null);
   };
 
   /**
-   * updateUser - Update the user object in state (e.g., after profile edit).
+   * updateUser - Update the user object in state.
    */
   const updateUser = (updatedUser) => {
     setUser(updatedUser);
@@ -188,6 +296,7 @@ export const AuthProvider = ({ children }) => {
     forgotPassword,
     resetPassword,
     googleLogin,
+    firebaseGoogleLogin,
     setRole,
     logout,
     updateUser,
@@ -196,10 +305,6 @@ export const AuthProvider = ({ children }) => {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
-/**
- * useAuth - Custom hook to access authentication context.
- * Must be used within an AuthProvider.
- */
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
