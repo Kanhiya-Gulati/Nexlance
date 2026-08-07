@@ -1,17 +1,38 @@
+const nodemailer = require('nodemailer');
 const https = require('https');
 
 /**
- * Send an email using Brevo Transactional Email HTTP API (v3)
- * Avoids outbound SMTP port blocking on cloud servers like Render.
+ * Send an email using Nodemailer (Gmail SMTP) or Brevo API fallback.
  * @param {Object} options - Email options (to, subject, text, html)
  */
 const sendEmail = async (options) => {
+  // Option 1: Gmail SMTP via Nodemailer (EMAIL_USER & EMAIL_PASS)
+  if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    const mailOptions = {
+      from: `NEXLANCE <${process.env.EMAIL_USER}>`,
+      to: options.to,
+      subject: options.subject,
+      html: options.html || options.text,
+    };
+
+    return await transporter.sendMail(mailOptions);
+  }
+
+  // Option 2: Brevo Transactional Email HTTP API (BREVO_API_KEY)
   const apiKey = process.env.BREVO_API_KEY;
   const senderEmail = process.env.BREVO_SENDER || 'contact.nexlance1@gmail.com';
 
   if (!apiKey) {
-    console.error('ERROR: BREVO_API_KEY is not defined in environment variables.');
-    return; // Silent fail in background to prevent crashing the server
+    console.error('Notice: Neither EMAIL_USER/EMAIL_PASS nor BREVO_API_KEY is configured in server/.env.');
+    return;
   }
 
   const postData = JSON.stringify({
