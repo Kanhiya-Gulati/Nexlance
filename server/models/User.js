@@ -28,9 +28,13 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
+    firebaseUid: {
+      type: String,
+      default: null,
+    },
     authProvider: {
       type: String,
-      enum: ['local', 'google'],
+      enum: ['local', 'google', 'firebase'],
       default: 'local',
     },
     role: {
