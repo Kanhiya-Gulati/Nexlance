@@ -25,6 +25,12 @@ const errorHandler = (err, req, res, next) => {
     message = 'Invalid ID';
   }
 
+  // Mongoose Connection / Buffering Timeout Error
+  if (err.name === 'MongooseError' && err.message.includes('buffering timed out')) {
+    statusCode = 503;
+    message = 'Database is not connected. Please set your MongoDB Atlas MONGODB_URI in server/.env file.';
+  }
+
   // MongoDB Duplicate Key Error
   if (err.code === 11000) {
     statusCode = 400;
