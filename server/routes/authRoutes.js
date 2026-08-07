@@ -21,6 +21,7 @@ const {
   getMe,
   googleAuth,
   setRole,
+  firebaseAuth,
 } = require('../controllers/authController');
 const { protect } = require('../middleware/auth');
 
@@ -86,6 +87,13 @@ router.post('/reset-password', resetPassword);
  * @access  Public
  */
 router.post('/google', googleAuth);
+
+/**
+ * @route   POST /api/auth/firebase
+ * @desc    Authenticate user via Firebase Email/Password or OAuth
+ * @access  Public
+ */
+router.post('/firebase', firebaseAuth);
 
 /**
  * @route   POST /api/auth/set-role
