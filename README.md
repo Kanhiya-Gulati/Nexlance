@@ -1,6 +1,6 @@
-# Nexlance - Premium Freelance Marketplace (MERN Stack)
+# Nexlance - Premium Freelance Marketplace (MERN Stack & Firebase Auth)
 
-Nexlance is a professional, high-end freelance marketplace designed with the premium aesthetics of Fiverr and Upwork. It connects clients and freelancers, enabling real-time collaboration, job postings, interactive profiles, and file-sharing chat threads.
+Nexlance is a professional, high-end freelance marketplace designed with the premium aesthetics of Fiverr and Upwork. It connects clients and freelancers, enabling real-time collaboration, job postings, interactive profiles, automated email notifications, and file-sharing chat threads.
 
 **🔗 Live Website:** [https://nexlance1.netlify.app](https://nexlance1.netlify.app/)
 
@@ -9,13 +9,14 @@ Nexlance is a professional, high-end freelance marketplace designed with the pre
 ## 🚀 Key Features
 
 * **🎨 Fiverr/Upwork-Style Premium UI:** Clean layout built using modern CSS variables, glassmorphic card designs, subtle hover animations, and dark-themed components.
-* **🔒 Secure OTP Gmail Authentication:** tabbed credentials login, forgot password workflows, and OTP validation via Nodemailer integration.
-* **🌐 Google OAuth 2.0 Integration:** Single-click login and registration with automated profile avatar fetching.
+* **🔥 Firebase Email & Password Authentication:** Instant user registration, secure login, and password reset email delivery powered by Firebase Auth.
+* **🌐 Firebase & Google OAuth 2.0 Integration:** Single-click Google login and sign-up with automated profile avatar generation and role assignment.
+* **📧 Automated Job Lifecycle Email Notifications:** Automated HTML email delivery via Nodemailer/Gmail for account creation welcome messages, proposal submissions, hiring acceptance, and project completion milestones.
 * **💬 Real-Time Chat System:** Real-time messaging using Socket.IO with typing indicators and online/offline status signals.
 * **📎 Multi-Format File Attachments:** Share resume PDFs, project images, or zipped documents (up to 10MB) directly in chat bubbles.
 * **🔗 Autolink Parser:** Detects web URLs within chat logs and formats them automatically into clickable hyperlinks.
 * **📈 Dual Role Dashboards:**
-  * **Client Dashboard:** Post new jobs, view application counts, manage proposals, and mark projects as completed.
+  * **Client Dashboard:** Post new jobs, view application counts, manage proposals, hire freelancers, and mark projects as completed.
   * **Freelancer Dashboard:** Browse active jobs, apply with cover letters/proposed budgets, toggle saved listings, and track application statuses.
 * **📱 Responsive Layout & Mobile Drawer:** Re-engineered side drawer and backdrop layout optimized for mobile screens.
 * **🔄 Seamless Page Scrolling:** Automatic scroll-to-top routing.
@@ -26,6 +27,7 @@ Nexlance is a professional, high-end freelance marketplace designed with the pre
 
 ### Frontend (Client)
 * **Core:** React 18, Vite (Fast build system)
+* **Auth:** Firebase Auth (`firebase/auth`)
 * **Routing:** React Router v6
 * **API Calls:** Axios (with auth bearer token interceptors)
 * **Sockets:** Socket.io-client
@@ -35,9 +37,9 @@ Nexlance is a professional, high-end freelance marketplace designed with the pre
 * **Core:** Node.js, Express.js
 * **Database:** MongoDB (using Mongoose ODM)
 * **Real-time Engine:** Socket.IO
-* **Email Service:** Nodemailer (SMTP configuration)
+* **Email Service:** Nodemailer (Gmail SMTP) & Brevo API fallback
 * **File Uploads:** Multer (Disk storage engine)
-* **Encryption:** Bcrypt.js (Password hashing) & JSON Web Tokens (JWT)
+* **Encryption & Auth:** Bcrypt.js, Firebase UID Sync & JSON Web Tokens (JWT)
 
 ---
 
@@ -48,15 +50,16 @@ Nexlance/
 ├── client/                 # React Frontend (Vite)
 │   ├── public/             # Static Assets & Netlify redirects configuration
 │   └── src/
+│       ├── config/         # Firebase SDK configuration
 │       ├── components/     # UI elements (Navbar, Footer, Spinner, EmptyState)
 │       ├── context/        # Context Providers (Auth, Toast, Socket)
-│       ├── pages/          # Full page views (Home, BrowseJobs, Dashboard, Profile)
+│       ├── pages/          # Full page views (Home, BrowseJobs, Dashboard, Profile, Login, Register, ForgotPassword)
 │       ├── services/       # Modular API fetch methods (Job, Application, Profile)
 │       └── utils/          # Formatting helpers and global constants
 │
 └── server/                 # Express Backend API
     ├── config/             # DB connection configs
-    ├── controllers/        # Route logic controllers
+    ├── controllers/        # Route logic controllers (Auth, Job, Application, Profile, Chat)
     ├── middleware/         # Auth checkers, file loaders, error handlers
     ├── models/             # Mongoose DB schemas (User, Job, Application, Message)
     ├── routes/             # REST routing paths
@@ -71,6 +74,7 @@ Nexlance/
 ### Prerequisites
 * [Node.js](https://nodejs.org/) installed.
 * [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) cluster active.
+* [Firebase Console](https://console.firebase.google.com/) project set up (Email/Password & Google enabled under Authentication).
 
 ### 1. Clone & Install
 ```bash
@@ -95,17 +99,22 @@ MONGODB_URI=your_mongodb_atlas_connection_string
 JWT_SECRET=your_jwt_signing_key
 PORT=5000
 NODE_ENV=development
+CLIENT_URL=http://localhost:5173
 EMAIL_USER=your_gmail_address
 EMAIL_PASS=your_gmail_app_password
-GOOGLE_CLIENT_ID=your_google_oauth_client_id
-GOOGLE_CLIENT_SECRET=your_google_oauth_client_secret
 ```
 
 Create a `.env` file in the **`client`** directory:
 ```env
 VITE_API_URL=http://localhost:5000/api
 VITE_SOCKET_URL=http://localhost:5000
-VITE_GOOGLE_CLIENT_ID=your_google_oauth_client_id
+
+VITE_FIREBASE_API_KEY=your_firebase_api_key
+VITE_FIREBASE_AUTH_DOMAIN=your_firebase_auth_domain
+VITE_FIREBASE_PROJECT_ID=your_firebase_project_id
+VITE_FIREBASE_STORAGE_BUCKET=your_firebase_storage_bucket
+VITE_FIREBASE_MESSAGING_SENDER_ID=your_firebase_messaging_sender_id
+VITE_FIREBASE_APP_ID=your_firebase_app_id
 ```
 
 ### 3. Run the Application
